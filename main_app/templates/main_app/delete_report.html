@@ -2,16 +2,89 @@
 <html>
 <head>
     <title>Hapus Laporan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fb;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .delete-card {
+            background: white;
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: left;
+        }
+
+        h1 {
+            color: #b02a37;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .report-title {
+            background: #fff3f3;
+            border-left: 5px solid #dc3545;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .btn-group {
+            margin-top: 20px;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-right: 10px;
+        }
+
+        .btn-cancel {
+            text-decoration: none;
+            color: #1f3c88;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hapus Laporan</h1>
-    <p>Apakah kamu yakin ingin menghapus laporan: <strong>{{ report.title }}</strong>?</p>
+    <div class="container">
+        <div class="delete-card">
+            <h1>Hapus Laporan</h1>
+            <p class="subtitle">Tindakan ini tidak dapat dibatalkan. Pastikan data yang dipilih sudah benar.</p>
 
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit">Ya, Hapus</button>
-    </form>
+            <div class="report-title">
+                <strong>Laporan yang akan dihapus:</strong><br>
+                {{ report.title }}
+            </div>
 
-    <a href="{% url 'home' %}">Batal</a>
+            <p>Apakah kamu yakin ingin menghapus laporan ini?</p>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="btn-group">
+                    <button class="btn-delete" type="submit">Ya, Hapus</button>
+                    <a class="btn-cancel" href="{% url 'home' %}">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

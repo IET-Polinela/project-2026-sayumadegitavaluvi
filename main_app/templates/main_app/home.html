@@ -1,34 +1,182 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Daftar Laporan</title>
+    <title>Daftar Laporan Smart City</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fb;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #1f3c88;
+            margin-bottom: 10px;
+        }
+
+        .top-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            background: #1f3c88;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .meta {
+            color: #555;
+            margin: 6px 0;
+        }
+
+        .desc {
+            color: #444;
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+
+        .actions a {
+            text-decoration: none;
+            margin-right: 12px;
+            color: #1f3c88;
+            font-weight: bold;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .reported {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .verified {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .inprogress {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .resolved {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .workflow-form {
+            margin-top: 15px;
+        }
+
+        .workflow-form button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .done-text {
+            margin-top: 15px;
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .empty {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-    <h1>Daftar Laporan Kota Bandar Lampung</h1>
+    <div class="container">
+        <h1>Daftar Laporan Smart City</h1>
+        <a class="top-link" href="{% url 'add_report' %}">+ Tambah Laporan</a>
 
-    <a href="{% url 'add_report' %}">Tambah Laporan</a>
-
-    <hr>
-
-    {% if reports %}
-        <ul>
+        {% if reports %}
             {% for report in reports %}
-                <li>
-                    <strong>{{ report.title }}</strong><br>
-                    Kategori: {{ report.category }}<br>
-                    Deskripsi: {{ report.description }}<br>
-                    Lokasi: {{ report.location }}<br>
-                    Status: {{ report.status }}<br>
-                    Dibuat: {{ report.created_at }}<br>
+                <div class="card">
+                    <h2>{{ report.title }}</h2>
 
-                    <a href="{% url 'edit_report' report.id %}">Edit</a>
-                    <a href="{% url 'delete_report' report.id %}">Hapus</a>
-                </li>
-                <hr>
+                    <p class="meta"><strong>Kategori:</strong> {{ report.category }}</p>
+                    <p class="meta"><strong>Lokasi:</strong> {{ report.location }}</p>
+                    <p class="meta"><strong>Dibuat:</strong> {{ report.created_at|date:"d F Y, H:i" }}</p>
+
+                    {% if report.status == 'REPORTED' %}
+                        <span class="status reported">Reported</span>
+                    {% elif report.status == 'VERIFIED' %}
+                        <span class="status verified">Verified</span>
+                    {% elif report.status == 'IN_PROGRESS' %}
+                        <span class="status inprogress">In Progress</span>
+                    {% else %}
+                        <span class="status resolved">Resolved</span>
+                    {% endif %}
+
+                    <div class="actions">
+                        <a href="{% url 'detail_report' report.id %}">Detail</a>
+                        <a href="{% url 'edit_report' report.id %}">Edit</a>
+                        <a href="{% url 'delete_report' report.id %}">Hapus</a>
+                    </div>
+
+                    {% if report.status == 'REPORTED' %}
+                        <form class="workflow-form" method="POST" action="{% url 'update_status' report.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="VERIFIED">
+                            <button type="submit">Ubah ke Verified</button>
+                        </form>
+                    {% elif report.status == 'VERIFIED' %}
+                        <form class="workflow-form" method="POST" action="{% url 'update_status' report.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="IN_PROGRESS">
+                            <button type="submit">Ubah ke In Progress</button>
+                        </form>
+                    {% elif report.status == 'IN_PROGRESS' %}
+                        <form class="workflow-form" method="POST" action="{% url 'update_status' report.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="RESOLVED">
+                            <button type="submit">Ubah ke Resolved</button>
+                        </form>
+                    {% else %}
+                        <p class="done-text">Laporan sudah selesai.</p>
+                    {% endif %}
+                </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>Belum ada laporan.</p>
-    {% endif %}
+        {% else %}
+            <div class="empty">
+                Belum ada laporan.
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>
