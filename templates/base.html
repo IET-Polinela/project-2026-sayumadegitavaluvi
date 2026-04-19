@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Arendelle City{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --deep-aqua: #003B46;
+            --ocean: #07575B;
+            --wave: #66A5AD;
+            --seafoam: #C4DFE6;
+
+            --text: #16343a;
+            --muted: #5e7d83;
+            --line: rgba(7, 87, 91, 0.14);
+            --shadow: 0 16px 35px rgba(0, 59, 70, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text);
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #e9f4f6 0%, transparent 22%),
+                radial-gradient(circle at bottom right, #dceef1 0%, transparent 20%),
+                linear-gradient(180deg, #f7fbfc 0%, #eef7f8 55%, #e6f2f4 100%);
+        }
+
+        h1, h2, h3, h4, h5, .navbar-brand, .page-title, .hero-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, var(--deep-aqua), var(--ocean)) !important;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            box-shadow: 0 8px 22px rgba(0, 59, 70, 0.12);
+        }
+
+        .navbar-brand {
+            font-size: 1.85rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,.88) !important;
+            font-weight: 600;
+            margin-left: .7rem;
+            transition: .2s ease;
+        }
+
+        .nav-link:hover {
+            color: #fff !important;
+            transform: translateY(-1px);
+        }
+
+        .site-wrap {
+            padding-bottom: 3rem;
+            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(196, 223, 230, 0.28) 100%);
+        }
+
+        .hero-section {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(120deg, #2f7b87 0%, #66A5AD 55%, #C4DFE6 100%);
+            color: #fff;
+            border-radius: 0 0 42px 42px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            left: -70px;
+            bottom: -70px;
+            width: 250px;
+            height: 130px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 60% 40% 50% 70%;
+            filter: blur(4px);
+        }
+
+        .hero-section::after {
+            content: "";
+            position: absolute;
+            right: -55px;
+            top: -55px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            padding: 4.8rem 0;
+        }
+
+        .hero-kicker {
+            display: inline-block;
+            padding: .55rem 1rem;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.18);
+            font-size: .9rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.12;
+            font-weight: 800;
+            margin-bottom: .9rem;
+            max-width: 560px;
+        }
+
+        .hero-text {
+            color: rgba(255,255,255,0.94);
+            font-size: 1rem;
+            line-height: 1.75;
+            max-width: 500px;
+        }
+
+        .hero-showcase {
+            background: rgba(255,255,255,0.16);
+            border: 1px solid rgba(255,255,255,0.24);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 1.3rem;
+            min-height: 270px;
+            box-shadow: 0 18px 40px rgba(0, 59, 70, 0.14);
+        }
+
+        .hero-card {
+            background: rgba(255,255,255,0.96);
+            color: var(--text);
+            border-radius: 24px;
+            padding: 1.35rem;
+            box-shadow: 0 14px 30px rgba(0, 59, 70, 0.08);
+        }
+
+        .section-pill {
+            display: inline-block;
+            background: rgba(102, 165, 173, 0.16);
+            color: var(--ocean);
+            border-radius: 999px;
+            padding: .46rem .95rem;
+            font-size: .84rem;
+            font-weight: 700;
+            margin-bottom: .8rem;
+        }
+
+        .page-header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f9fcfd, #e7f3f5);
+            border: 1px solid rgba(102, 165, 173, 0.22);
+            border-radius: 30px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .page-header::after {
+            content: "";
+            position: absolute;
+            right: -40px;
+            top: -35px;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(102,165,173,0.20) 0%, rgba(102,165,173,0.04) 62%, transparent 72%);
+        }
+
+        .page-title {
+            font-size: clamp(1.85rem, 4vw, 2.7rem);
+            font-weight: 800;
+            margin: 0 0 .45rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-subtitle {
+            color: var(--muted);
+            margin-bottom: 0;
+            max-width: 620px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .soft-card {
+            background: linear-gradient(180deg, #fafdfe 0%, #eef7f8 100%);
+            border: 1px solid rgba(102, 165, 173, 0.20);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .glass-card {
+            background: rgba(248, 252, 253, 0.82);
+            border: 1px solid rgba(255,255,255,0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-brand {
+            background: linear-gradient(135deg, var(--ocean), var(--wave));
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            padding: .82rem 1.35rem;
+            font-weight: 700;
+            box-shadow: 0 10px 22px rgba(7, 87, 91, 0.22);
+        }
+
+        .btn-brand:hover {
+            color: #fff;
+            background: linear-gradient(135deg, var(--deep-aqua), var(--ocean));
+        }
+
+        .btn-brand-outline {
+            background: rgba(255,255,255,0.95);
+            color: var(--ocean);
+            border: 1.5px solid rgba(7, 87, 91, 0.35);
+            border-radius: 16px;
+            padding: .82rem 1.35rem;
+            font-weight: 700;
+            box-shadow: 0 6px 16px rgba(102, 165, 173, 0.08);
+        }
+
+        .btn-brand-outline:hover {
+            background: #eef7f8;
+            color: var(--deep-aqua);
+        }
+
+        .btn-light {
+            background: rgba(255,255,255,0.96) !important;
+            color: var(--deep-aqua) !important;
+            border: 1px solid rgba(255,255,255,0.8) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 10px 20px rgba(0, 59, 70, 0.08);
+        }
+
+        .btn-light:hover {
+            background: #fff !important;
+            color: var(--deep-aqua) !important;
+        }
+
+        .btn-light,
+        .btn-brand-outline,
+        .btn-brand {
+            min-width: 190px;
+            text-align: center;
+        }
+
+        .hero-btn {
+            min-width: 210px;
+            height: 64px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            line-height: 1;
+            border-radius: 18px;
+            text-align: center;
+            padding: 0 1.4rem;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 16px;
+            border: 1px solid rgba(7, 87, 91, 0.14);
+            padding: .88rem 1rem;
+            background: rgba(255,255,255,0.92);
+            box-shadow: none;
+            font-size: .98rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: rgba(102, 165, 173, 0.5);
+            box-shadow: 0 0 0 0.2rem rgba(102, 165, 173, 0.12);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .table {
+            background: transparent;
+        }
+
+        .table thead th {
+            background: linear-gradient(90deg, var(--deep-aqua), var(--ocean)) !important;
+            color: #fff;
+            border: none;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .table tbody tr {
+            background: rgba(248, 252, 253, 0.82);
+        }
+
+        .table tbody tr:hover {
+            background: rgba(230, 243, 246, 0.95);
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+            border-color: rgba(102, 165, 173, 0.16);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: .45rem .95rem;
+            border-radius: 999px;
+            font-size: .82rem;
+            font-weight: 700;
+        }
+
+        .status-reported {
+            background: #d7e7eb;
+            color: #44656b;
+        }
+
+        .status-verified {
+            background: #cde7ea;
+            color: var(--ocean);
+        }
+
+        .status-progress {
+            background: #b8d8dd;
+            color: var(--deep-aqua);
+        }
+
+        .status-resolved {
+            background: var(--seafoam);
+            color: var(--ocean);
+        }
+
+        .metric-card,
+        .contact-box {
+            border-radius: 24px;
+            padding: 1.5rem;
+            background: linear-gradient(180deg, #fbfeff 0%, #edf7f8 100%);
+            border: 1px solid rgba(102, 165, 173, 0.18);
+            box-shadow: var(--shadow);
+            height: 100%;
+        }
+
+        .metric-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            background: linear-gradient(135deg, var(--ocean), var(--wave));
+        }
+
+        .contact-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(102, 165, 173, 0.14);
+            color: var(--ocean);
+            font-size: 1.15rem;
+            margin-bottom: .9rem;
+        }
+
+        .alert {
+            border-radius: 16px;
+            border: none;
+        }
+
+        .alert-success {
+            background: #e7f7f7;
+            color: var(--ocean);
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 1.2rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--ocean);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--muted);
+        }
+
+        .footer-note {
+            color: #6f8f95;
+            font-size: .88rem;
+            text-align: center;
+            margin-top: 2.5rem;
+        }
+
+        @media (max-width: 991px) {
+            .hero-inner {
+                padding: 4rem 0 3.2rem;
+            }
+
+            .hero-title,
+            .hero-text {
+                max-width: 100%;
+            }
+
+            .page-header {
+                padding: 1.5rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Arendelle City</a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse pt-3 pt-lg-0" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/reports/">Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about/">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contacts/">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% block hero %}{% endblock %}
+
+    <div class="site-wrap">
+        <div class="container mt-3">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="container mt-4">
+            {% block content %}{% endblock %}
+            <div class="footer-note">Designed for Smart City Issue Reporting • Arendelle City</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

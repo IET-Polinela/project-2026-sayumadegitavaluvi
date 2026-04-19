@@ -1,102 +1,66 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Tambah Laporan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fb;
-            margin: 0;
-            padding: 30px;
-        }
+{% extends 'base.html' %}
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
+{% block title %}Tambah Laporan{% endblock %}
 
-        .form-card {
-            background: white;
-            border-radius: 14px;
-            padding: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'report_list' %}">Reports</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Tambah Laporan</li>
+    </ol>
+</nav>
 
-        h1 {
-            color: #1f3c88;
-            margin-bottom: 10px;
-        }
+<div class="page-header mb-4">
+    <span class="section-pill">Create Report</span>
+    <h1 class="page-title">Tambah Laporan</h1>
+    <p class="page-subtitle">Silakan isi data laporan Smart City dengan lengkap.</p>
+</div>
 
-        .subtitle {
-            color: #666;
-            margin-bottom: 25px;
-        }
-
-        form p {
-            margin-bottom: 18px;
-        }
-
-        form label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #222;
-        }
-
-        form input,
-        form textarea,
-        form select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 15px;
-            box-sizing: border-box;
-        }
-
-        form textarea {
-            min-height: 140px;
-            resize: vertical;
-        }
-
-        .btn-group {
-            margin-top: 20px;
-        }
-
-        .btn-save {
-            background: #1f3c88;
-            color: white;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-            margin-right: 10px;
-        }
-
-        .back-link {
-            text-decoration: none;
-            color: #1f3c88;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="form-card">
-            <h1>Tambah Laporan</h1>
-            <p class="subtitle">Silakan isi data laporan Smart City dengan lengkap.</p>
-
-            <form method="POST">
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="soft-card p-4 p-md-5">
+            <form method="POST" id="reportForm">
                 {% csrf_token %}
-                {{ form.as_p }}
 
-                <div class="btn-group">
-                    <button class="btn-save" type="submit">Simpan</button>
-                    <a class="back-link" href="{% url 'home' %}">Kembali ke Home</a>
+                <div class="row g-4">
+                    <div class="col-12">
+                        <label for="{{ form.title.id_for_label }}" class="form-label fw-semibold">Judul</label>
+                        {{ form.title }}
+                    </div>
+
+                    <div class="col-12">
+                        <label for="{{ form.category.id_for_label }}" class="form-label fw-semibold">Kategori</label>
+                        {{ form.category }}
+                    </div>
+
+                    <div class="col-12">
+                        <label for="{{ form.description.id_for_label }}" class="form-label fw-semibold">Deskripsi</label>
+                        {{ form.description }}
+                    </div>
+
+                    <div class="col-12">
+                        <label for="{{ form.location.id_for_label }}" class="form-label fw-semibold">Lokasi</label>
+                        {{ form.location }}
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <button type="submit" id="submitBtn" class="btn btn-brand px-4">Simpan</button>
+                    <a href="{% url 'report_list' %}" class="btn btn-brand-outline px-4">Kembali</a>
                 </div>
             </form>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.getElementById('reportForm').addEventListener('submit', function () {
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Loading...';
+    });
+</script>
+{% endblock %}

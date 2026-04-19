@@ -1,90 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Hapus Laporan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fb;
-            margin: 0;
-            padding: 30px;
-        }
+{% extends 'base.html' %}
 
-        .container {
-            max-width: 700px;
-            margin: auto;
-        }
+{% block title %}Hapus Laporan{% endblock %}
 
-        .delete-card {
-            background: white;
-            border-radius: 14px;
-            padding: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            text-align: left;
-        }
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'report_list' %}">Reports</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Hapus Laporan</li>
+    </ol>
+</nav>
 
-        h1 {
-            color: #b02a37;
-            margin-bottom: 10px;
-        }
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="soft-card p-4 p-md-5 text-center">
+            <div class="metric-icon mx-auto mb-3">
+                <i class="bi bi-trash3"></i>
+            </div>
 
-        .subtitle {
-            color: #666;
-            margin-bottom: 20px;
-        }
+            <span class="section-pill">Delete Confirmation</span>
+            <h1 class="h2 text-danger fw-bold mb-2">Hapus Laporan</h1>
+            <p class="text-muted mb-4">
+                Tindakan ini tidak dapat dibatalkan. Pastikan data yang dipilih sudah benar.
+            </p>
 
-        .report-title {
-            background: #fff3f3;
-            border-left: 5px solid #dc3545;
-            padding: 14px 16px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            color: #333;
-        }
-
-        .btn-group {
-            margin-top: 20px;
-        }
-
-        .btn-delete {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-            margin-right: 10px;
-        }
-
-        .btn-cancel {
-            text-decoration: none;
-            color: #1f3c88;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="delete-card">
-            <h1>Hapus Laporan</h1>
-            <p class="subtitle">Tindakan ini tidak dapat dibatalkan. Pastikan data yang dipilih sudah benar.</p>
-
-            <div class="report-title">
+            <div class="alert alert-danger text-start">
                 <strong>Laporan yang akan dihapus:</strong><br>
                 {{ report.title }}
             </div>
 
-            <p>Apakah kamu yakin ingin menghapus laporan ini?</p>
-
-            <form method="POST">
+            <form method="POST" id="deleteForm">
                 {% csrf_token %}
-                <div class="btn-group">
-                    <button class="btn-delete" type="submit">Ya, Hapus</button>
-                    <a class="btn-cancel" href="{% url 'home' %}">Batal</a>
+                <div class="d-flex justify-content-center gap-2 flex-wrap mt-4">
+                    <button type="submit" id="deleteBtn" class="btn btn-danger rounded-4 px-4">Ya, Hapus</button>
+                    <a href="{% url 'report_list' %}" class="btn btn-brand-outline">Batal</a>
                 </div>
             </form>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.getElementById('deleteForm').addEventListener('submit', function () {
+        const btn = document.getElementById('deleteBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Loading...';
+    });
+</script>
+{% endblock %}

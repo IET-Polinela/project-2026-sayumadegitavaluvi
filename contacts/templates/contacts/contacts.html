@@ -1,13 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Contacts</title>
-</head>
-<body>
-    <h1>Halaman Kontak</h1>
-    <p>Nama: Sayu Made Gita Valuvi</p>
-    <p>Email: 24782030@student.polinela.ac.id</p>
-    <p>No. HP: 087654321</p>
-    <p>Alamat: Bandar Lampung, Indonesia</p>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Contact</li>
+    </ol>
+</nav>
+
+<div class="page-header">
+    <span class="section-pill">Contact Page</span>
+    <h1 class="page-title">Kontak</h1>
+    <p class="page-subtitle">Informasi pemilik project dan kontak yang dapat dihubungi.</p>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="contact-box">
+            <div class="contact-icon"><i class="bi bi-person"></i></div>
+            <h5 class="fw-bold">Nama</h5>
+            <p class="text-muted mb-0">Sayu Made Gita Valuvi</p>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="contact-box">
+            <div class="contact-icon"><i class="bi bi-envelope"></i></div>
+            <h5 class="fw-bold">Email</h5>
+            <p class="text-muted mb-0">24782030@student.polinela.ac.id</p>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="contact-box">
+            <div class="contact-icon"><i class="bi bi-telephone"></i></div>
+            <h5 class="fw-bold">No. HP</h5>
+            <p class="text-muted mb-0">087654321</p>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="contact-box">
+            <div class="contact-icon"><i class="bi bi-geo-alt"></i></div>
+            <h5 class="fw-bold">Alamat</h5>
+            <p class="text-muted mb-0">Bandar Lampung, Indonesia</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

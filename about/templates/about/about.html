@@ -1,12 +1,62 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>About</title>
-</head>
-<body>
-    <h1>About Me</h1>
-    <p>Halo, saya adalah mahasiswa Program Studi Teknologi Rekayasa Internet.</p>
-    <p>Website ini dibuat untuk memenuhi tugas Lab Session 2 mata kuliah Pemrograman Internet 1.</p>
-    <p>Pada project ini saya mempelajari cara membuat app, views, routing URL, dan template HTML menggunakan Django.</p>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">About</li>
+    </ol>
+</nav>
+
+<div class="page-header">
+    <span class="section-pill">About Project</span>
+    <h1 class="page-title">Tentang Arendelle City</h1>
+    <p class="page-subtitle">
+        Project ini dikembangkan untuk mendukung pelaporan masalah kota.
+    </p>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="soft-card p-4 h-100">
+            <h4 class="fw-bold mb-3">Project Overview</h4>
+            <p class="text-muted">
+                Website ini dibuat sebagai pengembangan bertahap dari praktikum Pemrograman Internet.
+                Fokus utamanya adalah implementasi Django, CRUD berbasis CBV, workflow laporan,
+                dan peningkatan UI/UX menggunakan Bootstrap.
+            </p>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="soft-card p-4 h-100">
+            <h4 class="fw-bold mb-3">Yang Dipelajari</h4>
+            <div class="d-grid gap-3">
+                <div class="d-flex gap-3">
+                    <div class="contact-icon mb-0"><i class="bi bi-diagram-3"></i></div>
+                    <div>
+                        <strong>Django Structure</strong>
+                        <div class="text-muted small">App, views, models, urls, templates</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-3">
+                    <div class="contact-icon mb-0"><i class="bi bi-window"></i></div>
+                    <div>
+                        <strong>Class-Based View</strong>
+                        <div class="text-muted small">List, detail, create, update, delete</div>
+                    </div>
+                </div>
+                <div class="d-flex gap-3">
+                    <div class="contact-icon mb-0"><i class="bi bi-palette"></i></div>
+                    <div>
+                        <strong>UI/UX Enhancement</strong>
+                        <div class="text-muted small">Bootstrap, feedback, responsive design</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

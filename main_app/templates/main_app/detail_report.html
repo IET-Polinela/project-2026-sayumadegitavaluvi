@@ -1,162 +1,91 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Detail Laporan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fb;
-            margin: 0;
-            padding: 30px;
-        }
+{% extends 'base.html' %}
 
-        .container {
-            max-width: 850px;
-            margin: auto;
-        }
+{% block title %}Detail Laporan{% endblock %}
 
-        .detail-card {
-            background: white;
-            border-radius: 14px;
-            padding: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'report_list' %}">Reports</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Detail Laporan</li>
+    </ol>
+</nav>
 
-        h1 {
-            color: #1f3c88;
-            margin-bottom: 20px;
-        }
+<div class="page-header">
+    <span class="section-pill">Report Overview</span>
+    <h1 class="page-title">{{ report.title }}</h1>
+    <p class="page-subtitle">Informasi lengkap laporan Smart City dan status penanganannya.</p>
+</div>
 
-        .item {
-            margin-bottom: 16px;
-            color: #333;
-            line-height: 1.7;
-        }
-
-        .label {
-            font-weight: bold;
-            color: #111;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .reported {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .verified {
-            background: #cce5ff;
-            color: #004085;
-        }
-
-        .inprogress {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .resolved {
-            background: #e2e3e5;
-            color: #383d41;
-        }
-
-        .workflow-form {
-            margin-top: 20px;
-        }
-
-        .workflow-form button {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .done-text {
-            margin-top: 20px;
-            color: #198754;
-            font-weight: bold;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #1f3c88;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="detail-card">
-            <h1>Detail Laporan</h1>
-
-            <div class="item">
-                <span class="label">Judul:</span> {{ report.title }}
-            </div>
-
-            <div class="item">
-                <span class="label">Kategori:</span> {{ report.category }}
-            </div>
-
-            <div class="item">
-                <span class="label">Deskripsi:</span><br>
-                {{ report.description }}
-            </div>
-
-            <div class="item">
-                <span class="label">Lokasi:</span> {{ report.location }}
-            </div>
-
-            <div class="item">
-                <span class="label">Status:</span>
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="soft-card p-4">
+            <div class="mb-3">
                 {% if report.status == 'REPORTED' %}
-                    <span class="status reported">Reported</span>
+                    <span class="status-pill status-reported">Reported</span>
                 {% elif report.status == 'VERIFIED' %}
-                    <span class="status verified">Verified</span>
+                    <span class="status-pill status-verified">Verified</span>
                 {% elif report.status == 'IN_PROGRESS' %}
-                    <span class="status inprogress">In Progress</span>
+                    <span class="status-pill status-progress">In Progress</span>
                 {% else %}
-                    <span class="status resolved">Resolved</span>
+                    <span class="status-pill status-resolved">Resolved</span>
                 {% endif %}
             </div>
 
-            <div class="item">
-                <span class="label">Dibuat:</span> {{ report.created_at|date:"d F Y, H:i" }}
+            <div class="mb-3">
+                <label class="form-label fw-bold">Kategori</label>
+                <div class="form-control bg-light">{{ report.category }}</div>
             </div>
 
-            {% if report.status == 'REPORTED' %}
-                <form class="workflow-form" method="POST" action="{% url 'update_status' report.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="status" value="VERIFIED">
-                    <button type="submit">Ubah ke Verified</button>
-                </form>
-            {% elif report.status == 'VERIFIED' %}
-                <form class="workflow-form" method="POST" action="{% url 'update_status' report.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="status" value="IN_PROGRESS">
-                    <button type="submit">Ubah ke In Progress</button>
-                </form>
-            {% elif report.status == 'IN_PROGRESS' %}
-                <form class="workflow-form" method="POST" action="{% url 'update_status' report.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="status" value="RESOLVED">
-                    <button type="submit">Ubah ke Resolved</button>
-                </form>
-            {% else %}
-                <p class="done-text">Laporan sudah berada pada status akhir.</p>
-            {% endif %}
+            <div class="mb-3">
+                <label class="form-label fw-bold">Deskripsi</label>
+                <div class="form-control bg-light" style="min-height: 160px;">{{ report.description }}</div>
+            </div>
 
-            <a class="back-link" href="{% url 'home' %}">← Kembali ke Home</a>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Lokasi</label>
+                <div class="form-control bg-light">{{ report.location }}</div>
+            </div>
+
+            <div class="mb-0">
+                <label class="form-label fw-bold">Dibuat</label>
+                <div class="form-control bg-light">{{ report.created_at|date:"d F Y, H:i" }}</div>
+            </div>
         </div>
     </div>
-</body>
-</html>
+
+    <div class="col-lg-4">
+        <div class="soft-card p-4 h-100">
+            <h5 class="fw-bold mb-3">Aksi Cepat</h5>
+
+            <div class="d-grid gap-2">
+                {% if report.status == 'REPORTED' %}
+                    <form method="POST" action="{% url 'update_status' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status menjadi Verified?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="status" value="VERIFIED">
+                        <button type="submit" class="btn btn-outline-primary w-100 rounded-4">Verifikasi</button>
+                    </form>
+                {% elif report.status == 'VERIFIED' %}
+                    <form method="POST" action="{% url 'update_status' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status menjadi In Progress?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="status" value="IN_PROGRESS">
+                        <button type="submit" class="btn btn-outline-warning w-100 rounded-4">Proses</button>
+                    </form>
+                {% elif report.status == 'IN_PROGRESS' %}
+                    <form method="POST" action="{% url 'update_status' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status menjadi Resolved?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="status" value="RESOLVED">
+                        <button type="submit" class="btn btn-outline-success w-100 rounded-4">Selesaikan</button>
+                    </form>
+                {% else %}
+                    <div class="alert alert-success mb-0">Laporan sudah berada pada status akhir.</div>
+                {% endif %}
+
+                <a href="{% url 'edit_report' report.id %}" class="btn btn-warning text-dark rounded-4">Edit</a>
+                <a href="{% url 'delete_report' report.id %}" class="btn btn-danger rounded-4">Hapus</a>
+                <a href="{% url 'report_list' %}" class="btn btn-brand-outline">Kembali</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
