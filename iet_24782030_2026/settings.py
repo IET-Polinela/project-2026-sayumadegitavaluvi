@@ -37,11 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'main_app',
     'about',
     'contacts',
+    'usermanagement_24782030',
 ]
+
+AUTH_USER_MODEL = 'usermanagement_24782030.CustomUser'
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,7 +86,7 @@ WSGI_APPLICATION = 'iet_24782030_2026.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smartcity_db',
+        'NAME': 'smartcity_lab6_db',
         'USER': 'postgres',
         'PASSWORD': '@Gitavaluvi01',
         'HOST': 'localhost',
