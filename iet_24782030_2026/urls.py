@@ -24,4 +24,6 @@ urlpatterns = [
     path('', include('contacts.urls')),
     path('', include('usermanagement_24782030.urls')),
     path('', include('dashboard_24782030.urls')),
+
+    path('api/', include('main_app.api_urls')),
 ]
