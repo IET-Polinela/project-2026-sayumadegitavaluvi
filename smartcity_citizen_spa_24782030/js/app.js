@@ -64,13 +64,18 @@ function renderList() {
 
     let html = '';
     allReports.forEach(report => {
-        const badge = badgeMap[report.status] || 'dark';
+        const badge    = badgeMap[report.status] || 'dark';
         const progress = progressMap[report.status] || { value: 0, color: 'dark' };
-        const editBtn = (report.status === 'DRAFT' && report.is_owner)
+        const editBtn  = (report.status === 'DRAFT' && report.is_owner)
             ? `<button class="btn btn-sm btn-outline-primary mt-3" onclick="editDraft(${report.id})">
                 <i class="bi bi-pencil me-1"></i>Edit Draft
                </button>`
             : '';
+
+        const updatedAt = new Date(report.updated_at).toLocaleString('id-ID', {
+            day: '2-digit', month: 'long', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
 
         html += `
             <div class="card border-0 shadow-sm mb-3">
@@ -85,6 +90,9 @@ function renderList() {
                     <p class="text-muted mb-3">${report.description}</p>
                     <small class="d-block text-muted">📍 ${report.location}</small>
                     <small class="d-block text-muted">Pelapor: ${report.reporter}</small>
+                    <small class="d-block text-muted mt-1">
+                        <i class="bi bi-clock me-1"></i>${updatedAt}
+                    </small>
                     <div class="mt-3">
                         <small class="text-muted">Progress Penanganan</small>
                         <div class="progress mt-1" style="height:8px;">
@@ -120,29 +128,56 @@ async function loadSummaryStats() {
         const reports = data.results || [];
 
         const draftCount      = reports.filter(r => r.status === 'DRAFT').length;
-        const inProgressCount = reports.filter(r => ['REPORTED', 'VERIFIED', 'IN_PROGRESS'].includes(r.status)).length;
+        const reportedCount   = reports.filter(r => r.status === 'REPORTED').length;
+        const verifiedCount   = reports.filter(r => r.status === 'VERIFIED').length;
+        const inProgressCount = reports.filter(r => r.status === 'IN_PROGRESS').length;
         const resolvedCount   = reports.filter(r => r.status === 'RESOLVED').length;
 
-        renderSummaryStats(draftCount, inProgressCount, resolvedCount);
+        renderSummaryStats(draftCount, reportedCount, verifiedCount, inProgressCount, resolvedCount);
     } catch (error) {
         console.error('Summary Stats Error:', error);
     }
 }
 
-function renderSummaryStats(draftCount, inProgressCount, resolvedCount) {
-    const summaryContainer = document.getElementById('summaryContainer');
+function renderSummaryStats(
+    draftCount,
+    reportedCount,
+    verifiedCount,
+    inProgressCount,
+    resolvedCount
+) {
+
+    const summaryContainer =
+        document.getElementById('summaryContainer');
+
     if (!summaryContainer) return;
 
     summaryContainer.innerHTML = `
-        <div class="d-flex justify-content-between mb-2">
-            <span>Draft</span><span class="fw-bold">${draftCount}</span>
+        <div class="d-flex justify-content-between mb-2 px-1">
+            <span class="small fw-semibold text-secondary">Draft</span>
+            <span class="fw-bold badge bg-secondary">${draftCount}</span>
         </div>
-        <div class="d-flex justify-content-between mb-2">
-            <span>Diproses</span><span class="fw-bold">${inProgressCount}</span>
+
+        <div class="d-flex justify-content-between mb-2 px-1">
+            <span class="small fw-semibold text-warning">Reported</span>
+            <span class="fw-bold badge bg-warning text-dark">${reportedCount}</span>
         </div>
-        <div class="d-flex justify-content-between">
-            <span>Selesai</span><span class="fw-bold">${resolvedCount}</span>
-        </div>`;
+
+        <div class="d-flex justify-content-between mb-2 px-1">
+            <span class="small fw-semibold text-info">Verified</span>
+            <span class="fw-bold badge bg-info text-dark">${verifiedCount}</span>
+        </div>
+
+        <div class="d-flex justify-content-between mb-2 px-1">
+            <span class="small fw-semibold text-primary">In Progress</span>
+            <span class="fw-bold badge bg-primary">${inProgressCount}</span>
+        </div>
+
+        <div class="d-flex justify-content-between px-1">
+            <span class="small fw-semibold text-success">Resolved</span>
+            <span class="fw-bold badge bg-success">${resolvedCount}</span>
+        </div>
+    `;
 }
 
 async function editDraft(id) {

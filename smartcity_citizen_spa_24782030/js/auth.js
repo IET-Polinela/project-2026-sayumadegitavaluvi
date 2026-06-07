@@ -32,6 +32,11 @@ function setupLoginForm() {
             );
 
             localStorage.setItem(
+                'username',
+                username
+            );
+
+            localStorage.setItem(
                 'refresh',
                 result.refresh
             );
