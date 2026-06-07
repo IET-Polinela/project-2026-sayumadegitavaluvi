@@ -62,6 +62,7 @@ const routes = {
                         </div>
 
                         <div>
+
                             <small
                                 class="text-muted d-block"
                                 style="font-size:11px;"
@@ -75,6 +76,7 @@ const routes = {
                             >
                                 Warga Smart City
                             </span>
+
                         </div>
 
                     </div>
@@ -82,13 +84,17 @@ const routes = {
                     <hr class="text-muted my-2 opacity-25">
 
                     <button
+                        id="btnOpenReportModal"
                         class="btn btn-primary btn-lg w-100 fw-bold my-2 shadow-sm d-flex align-items-center justify-content-center gap-2"
                         style="
                             border-radius:12px;
                         "
                     >
+
                         <i class="bi bi-plus-circle-fill fs-5"></i>
+
                         Laporan Baru
+
                     </button>
 
                 </div>
@@ -99,70 +105,55 @@ const routes = {
             <section class="col-12 col-lg-6">
 
                 <div
-                    class="card border-0 shadow-sm text-center text-muted d-flex justify-content-center align-items-center p-4 p-lg-5"
+                    class="card border-0 shadow-sm p-4"
                     style="
                         background:#ffffff;
-                        min-height:300px;
                         border-radius:16px;
                     "
                 >
 
                     <div
-                        class="bg-light rounded-circle d-flex align-items-center justify-content-center mb-4"
-                        style="
-                            width:80px;
-                            height:80px;
-                            background:radial-gradient(#f8f9fa,#eef5f5);
-                        "
+                        class="d-flex gap-2 mb-4"
                     >
-                        <i
-                            class="bi bi-chat-left-heart"
-                            style="
-                                font-size:2.2rem;
-                                color:#0a6b6b;
-                            "
-                        ></i>
+
+                        <button
+                            id="btnMyReports"
+                            class="btn btn-primary fw-bold"
+                        >
+                            Laporan Saya
+                        </button>
+
+                        <button
+                            id="btnFeed"
+                            class="btn btn-outline-primary fw-bold"
+                        >
+                            Feed Kota
+                        </button>
+
                     </div>
 
-                    <h4 class="fw-bold text-dark mb-2">
-                        Halo, Selamat Datang!
-                    </h4>
+                    <div id="listContainer">
 
-                    <p
-                        class="text-secondary mb-4"
-                        style="
-                            max-width:420px;
-                            font-size:14px;
-                            line-height:1.6;
-                        "
-                    >
-                        Senang melihat Anda kembali.
-                        Ruang aspirasi dan pelaporan warga siap membantu
-                        mewujudkan lingkungan kota yang lebih baik.
-                    </p>
+                        <div
+                            class="text-center text-muted py-5"
+                        >
+
+                            <div
+                                class="spinner-border text-secondary mb-3"
+                            ></div>
+
+                            <p class="mb-0">
+                                Memuat data laporan...
+                            </p>
+
+                        </div>
+
+                    </div>
 
                     <div
-                        class="px-3 py-2 rounded-pill d-inline-flex align-items-center gap-2 flex-wrap justify-content-center"
-                        style="
-                            background-color:#eef5f5;
-                            border:1px dashed #0a6b6b;
-                        "
-                    >
-
-                        <i
-                            class="bi bi-cloud-arrow-down-fill"
-                            style="color:#0a6b6b;"
-                        ></i>
-
-                        <small
-                            class="fw-medium text-dark"
-                            style="font-size:12px;"
-                        >
-                            Koneksi API data laporan akan diimplementasikan
-                            pada <strong>Lab 12</strong>.
-                        </small>
-
-                    </div>
+                        id="paginationContainer"
+                        class="mt-4"
+                    ></div>
 
                 </div>
 
@@ -180,50 +171,33 @@ const routes = {
                 >
 
                     <h6
-                        class="fw-bold text-dark d-flex align-items-center gap-2 mb-3"
+                        class="fw-bold text-dark mb-3"
                     >
-
-                        <span
-                            class="p-1 rounded d-flex align-items-center justify-content-center"
-                            style="
-                                background-color:
-                                rgba(10,107,107,0.1);
-                            "
-                        >
-
-                            <i
-                                class="bi bi-info-circle-fill"
-                                style="color:#0a6b6b;"
-                            ></i>
-
-                        </span>
-
-                        Pengumuman
-
+                        Statistik Saya
                     </h6>
 
-                    <div
-                        class="p-3 rounded-3"
-                        style="
-                            background-color:#f8f9fa;
-                            border-left:4px solid #0a6b6b;
-                        "
-                    >
+                    <div id="summaryContainer">
 
-                        <small
-                            class="text-muted d-block mb-1"
-                            style="font-size:11px;"
+                        <div
+                            class="d-flex justify-content-between mb-2"
                         >
-                            Informasi Sistem
-                        </small>
+                            <span>Draft</span>
+                            <span class="fw-bold">0</span>
+                        </div>
 
-                        <p
-                            class="mb-0 fw-semibold text-dark"
-                            style="font-size:13px;"
+                        <div
+                            class="d-flex justify-content-between mb-2"
                         >
-                            Informasi terbaru dari admin dan layanan
-                            warga akan ditampilkan pada bagian ini.
-                        </p>
+                            <span>Diproses</span>
+                            <span class="fw-bold">0</span>
+                        </div>
+
+                        <div
+                            class="d-flex justify-content-between"
+                        >
+                            <span>Selesai</span>
+                            <span class="fw-bold">0</span>
+                        </div>
 
                     </div>
 
@@ -256,12 +230,37 @@ function handleRouting() {
         } else {
 
             navbarLogout.style.display = 'none';
+
         }
+
     }
 
     if (hash === '#login') {
+
         setupLoginForm();
+
     }
+
+    if (hash === '#dashboard') {
+
+        if (
+            typeof setupReportModal === 'function'
+        ) {
+            setupReportModal();
+        }
+
+        setTimeout(() => {
+
+        if (
+            typeof initializeDashboard === 'function'
+        ) {
+            initializeDashboard();
+        }
+
+        }, 100);
+
+    }
+
 }
 
 window.addEventListener(
