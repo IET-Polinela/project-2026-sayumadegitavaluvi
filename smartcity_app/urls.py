@@ -1,5 +1,5 @@
 """
-URL configuration for iet_24782030_2026 project.
+URL configuration for smartcity_app project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/6.0/topics/http/urls/

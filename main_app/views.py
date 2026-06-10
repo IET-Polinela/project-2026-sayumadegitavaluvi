@@ -54,7 +54,31 @@ class ReportListView(ListView):
     model = Report
     template_name = 'main_app/home.html'
     context_object_name = 'reports'
-    ordering = ['-created_at']
+
+    def get_queryset(self):
+
+        user = self.request.user
+
+        if user.is_authenticated and user.is_admin:
+
+            return Report.objects.exclude(
+                status='DRAFT'
+            ).order_by('-created_at')
+
+        return Report.objects.filter(
+            Q(
+                status__in=[
+                    'REPORTED',
+                    'VERIFIED',
+                    'IN_PROGRESS',
+                    'RESOLVED'
+                ]
+            ) |
+            Q(
+                reporter=user,
+                status='DRAFT'
+            )
+        ).order_by('-created_at')
 
 
 class ReportDetailView(DetailView):
