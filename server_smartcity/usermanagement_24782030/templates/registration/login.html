@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Navara City{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Login
+        </li>
+    </ol>
+</nav>
+
+<section class="auth-page-shell">
+    <aside class="auth-visual-card">
+        <div class="auth-visual-content">
+            <span class="section-pill auth-pill">
+                Authentication
+            </span>
+
+            <h1>
+                Masuk ke Portal Navara City
+            </h1>
+
+            <p>
+                Login digunakan untuk mengakses fitur pengelolaan laporan,
+                melihat data, dan memantau status laporan pada sistem Navara City.
+            </p>
+
+            <div class="auth-benefit-list">
+                <div class="auth-benefit-item">
+                    <i class="bi bi-shield-check"></i>
+                    <span>Akses akun lebih aman</span>
+                </div>
+
+                <div class="auth-benefit-item">
+                    <i class="bi bi-clipboard2-check"></i>
+                    <span>Kelola laporan kota</span>
+                </div>
+
+                <div class="auth-benefit-item">
+                    <i class="bi bi-bar-chart-line"></i>
+                    <span>Pantau dashboard statistik</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="auth-form-card">
+        <div class="auth-form-header">
+            <div class="auth-form-icon">
+                <i class="bi bi-person-lock"></i>
+            </div>
+
+            <span class="section-pill">
+                Login Account
+            </span>
+
+            <h2>
+                Login
+            </h2>
+
+            <p>
+                Masukkan username dan password untuk melanjutkan.
+            </p>
+        </div>
+
+        <form method="POST" id="loginForm" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="auth-alert">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="auth-input-group">
+                <label for="{{ form.username.id_for_label }}">
+                    Username
+                </label>
+
+                <div class="auth-input-wrapper">
+                    <i class="bi bi-person"></i>
+                    {{ form.username }}
+                </div>
+
+                {% if form.username.errors %}
+                    <div class="auth-field-error">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="auth-input-group">
+                <label for="{{ form.password.id_for_label }}">
+                    Password
+                </label>
+
+                <div class="auth-input-wrapper auth-password-wrapper">
+                    <i class="bi bi-lock"></i>
+                    {{ form.password }}
+
+                    <button type="button" class="auth-password-toggle" data-toggle-password>
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+
+                {% if form.password.errors %}
+                    <div class="auth-field-error">
+                        {{ form.password.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="auth-actions">
+                <button type="submit" id="loginBtn" class="auth-submit-btn">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Login
+                </button>
+
+                <a href="{% url 'home' %}" class="auth-back-btn">
+                    <i class="bi bi-arrow-left"></i>
+                    Kembali
+                </a>
+            </div>
+        </form>
+
+        <div class="auth-switch-box">
+            <span>Belum punya akun?</span>
+            <a href="{% url 'register' %}">
+                Daftar di sini
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const toggleBtn = document.querySelector('[data-toggle-password]');
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            const passwordInput = toggleBtn.closest('.auth-password-wrapper').querySelector('input');
+            const icon = toggleBtn.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.className = 'bi bi-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                icon.className = 'bi bi-eye';
+            }
+        });
+    }
+
+    if (loginForm && loginBtn) {
+        loginForm.addEventListener('submit', function () {
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = `
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Memproses...
+            `;
+        });
+    }
+});
+</script>
+{% endblock %}

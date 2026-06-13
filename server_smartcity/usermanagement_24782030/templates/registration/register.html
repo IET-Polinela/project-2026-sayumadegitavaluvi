@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Navara City{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Register
+        </li>
+    </ol>
+</nav>
+
+<section class="auth-page-shell auth-register-shell">
+    <aside class="auth-visual-card">
+        <div class="auth-visual-content">
+            <span class="section-pill auth-pill">
+                Create Account
+            </span>
+
+            <h1>
+                Buat Akun Navara City
+            </h1>
+
+            <p>
+                Registrasi digunakan untuk membuat akun citizen agar dapat masuk
+                ke sistem dan menggunakan layanan Navara City.
+            </p>
+
+            <div class="auth-benefit-list">
+                <div class="auth-benefit-item">
+                    <i class="bi bi-person-plus"></i>
+                    <span>Buat akun baru</span>
+                </div>
+
+                <div class="auth-benefit-item">
+                    <i class="bi bi-shield-lock"></i>
+                    <span>Data akun lebih aman</span>
+                </div>
+
+                <div class="auth-benefit-item">
+                    <i class="bi bi-buildings"></i>
+                    <span>Akses portal Navara City</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="auth-form-card">
+        <div class="auth-form-header">
+            <div class="auth-form-icon">
+                <i class="bi bi-person-plus"></i>
+            </div>
+
+            <span class="section-pill">
+                Register Account
+            </span>
+
+            <h2>
+                Register
+            </h2>
+
+            <p>
+                Lengkapi data akun untuk membuat akun baru.
+            </p>
+        </div>
+
+        <form method="POST" id="registerForm" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="auth-alert">
+                    Silakan periksa kembali data yang diinput.
+                </div>
+            {% endif %}
+
+            <div class="auth-input-group">
+                <label for="{{ form.username.id_for_label }}">
+                    Username
+                </label>
+
+                <div class="auth-input-wrapper">
+                    <i class="bi bi-person"></i>
+                    {{ form.username }}
+                </div>
+
+                {% if form.username.errors %}
+                    <div class="auth-field-error">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="auth-input-group">
+                <label for="{{ form.email.id_for_label }}">
+                    Email
+                </label>
+
+                <div class="auth-input-wrapper">
+                    <i class="bi bi-envelope"></i>
+                    {{ form.email }}
+                </div>
+
+                {% if form.email.errors %}
+                    <div class="auth-field-error">
+                        {{ form.email.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="auth-input-group">
+                <label for="{{ form.password1.id_for_label }}">
+                    Password
+                </label>
+
+                <div class="auth-input-wrapper auth-password-wrapper">
+                    <i class="bi bi-lock"></i>
+                    {{ form.password1 }}
+
+                    <button type="button" class="auth-password-toggle" data-toggle-password>
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+
+                {% if form.password1.errors %}
+                    <div class="auth-field-error">
+                        {{ form.password1.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="auth-input-group">
+                <label for="{{ form.password2.id_for_label }}">
+                    Konfirmasi Password
+                </label>
+
+                <div class="auth-input-wrapper auth-password-wrapper">
+                    <i class="bi bi-shield-lock"></i>
+                    {{ form.password2 }}
+
+                    <button type="button" class="auth-password-toggle" data-toggle-password>
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+
+                {% if form.password2.errors %}
+                    <div class="auth-field-error">
+                        {{ form.password2.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="auth-actions">
+                <button type="submit" id="registerBtn" class="auth-submit-btn">
+                    <i class="bi bi-person-plus"></i>
+                    Register
+                </button>
+
+                <a href="{% url 'login' %}" class="auth-back-btn">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    Ke Login
+                </a>
+            </div>
+        </form>
+
+        <div class="auth-switch-box">
+            <span>Sudah punya akun?</span>
+            <a href="{% url 'login' %}">
+                Login di sini
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const registerForm = document.getElementById('registerForm');
+    const registerBtn = document.getElementById('registerBtn');
+    const toggleButtons = document.querySelectorAll('[data-toggle-password]');
+
+    toggleButtons.forEach(function (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            const passwordInput = toggleBtn.closest('.auth-password-wrapper').querySelector('input');
+            const icon = toggleBtn.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.className = 'bi bi-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                icon.className = 'bi bi-eye';
+            }
+        });
+    });
+
+    if (registerForm && registerBtn) {
+        registerForm.addEventListener('submit', function () {
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = `
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Memproses...
+            `;
+        });
+    }
+});
+</script>
+{% endblock %}

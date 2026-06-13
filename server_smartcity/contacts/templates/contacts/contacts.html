@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact - Navara City{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Contact
+        </li>
+    </ol>
+</nav>
+
+<section class="page-header contact-page-header">
+    <div class="contact-header-content">
+        <span class="section-pill">
+            Contact Page
+        </span>
+
+        <h1 class="page-title">
+            Kontak Navara City
+        </h1>
+
+        <p class="page-subtitle">
+            Informasi admin dan kontak layanan yang berkaitan dengan sistem
+            pelaporan masalah kota Navara City.
+        </p>
+    </div>
+
+    <div class="contact-header-card">
+        <i class="bi bi-envelope-paper"></i>
+        <div>
+            <strong>Contact Center</strong>
+            <span>Informasi layanan</span>
+        </div>
+    </div>
+</section>
+
+<section class="contact-section-intro">
+    <span class="section-pill">
+        Hubungi Kami
+    </span>
+
+    <h2>
+        Informasi Kontak Layanan
+    </h2>
+
+    <p>
+        Gunakan informasi berikut untuk menghubungi admin layanan Navara City.
+    </p>
+</section>
+
+<section class="contact-grid">
+    <article class="contact-info-card fade-item">
+        <div class="contact-info-icon">
+            <i class="bi bi-person"></i>
+        </div>
+
+        <span>Nama Admin</span>
+        <h3>Sayu Gita</h3>
+        <p>Admin layanan informasi dan pengelolaan laporan Navara City.</p>
+    </article>
+
+    <article class="contact-info-card fade-item">
+        <div class="contact-info-icon">
+            <i class="bi bi-envelope"></i>
+        </div>
+
+        <span>Email</span>
+        <h3>
+            <a href="mailto:help@navaracity.com" class="contact-link">
+                help@navaracity.com
+            </a>
+        </h3>
+        <p>Email kontak untuk kebutuhan informasi layanan.</p>
+    </article>
+
+    <article class="contact-info-card fade-item">
+        <div class="contact-info-icon">
+            <i class="bi bi-telephone"></i>
+        </div>
+
+        <span>No. HP</span>
+        <h3>
+            <a href="tel:087654321900" class="contact-link">
+                085854321900
+            </a>
+        </h3>
+        <p>Nomor kontak yang dapat dihubungi terkait layanan.</p>
+    </article>
+
+    <article class="contact-info-card fade-item">
+        <div class="contact-info-icon">
+            <i class="bi bi-geo-alt"></i>
+        </div>
+
+        <span>Alamat</span>
+        <h3>Bandar Lampung, Indonesia</h3>
+        <p>Lokasi layanan dan pengelolaan sistem Navara City.</p>
+    </article>
+
+    <article class="contact-info-card fade-item">
+        <div class="contact-info-icon">
+            <i class="bi bi-clock"></i>
+        </div>
+
+        <span>Jam Operasional</span>
+        <h3>Senin–Jumat</h3>
+        <p>08.00–17.00 WIB</p>
+    </article>
+</section>
+
+<section class="contact-bottom-banner">
+    <div class="contact-bottom-content">
+        <span class="section-pill contact-bottom-pill">
+            Project Info
+        </span>
+
+        <h2>
+            Navara City Issue Reporting System
+        </h2>
+
+        <p>
+            Project ini dibuat sebagai sistem pelaporan masalah perkotaan berbasis web menggunakan Django.
+            Sistem menyediakan halaman laporan, dashboard statistik, pencarian data, detail laporan,
+            serta pengelolaan status laporan.
+        </p>
+    </div>
+
+    <div class="contact-bottom-icon">
+        <i class="bi bi-buildings"></i>
+        <strong>Navara City</strong>
+        <span>Smart City Issue Reporting</span>
+    </div>
+</section>
+{% endblock %}

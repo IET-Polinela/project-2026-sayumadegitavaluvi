@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}Hapus Laporan - Navara City{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'report_list' %}">Reports</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Hapus Laporan
+        </li>
+    </ol>
+</nav>
+
+<section class="page-header delete-report-header">
+    <div class="delete-report-header-content">
+        <span class="section-pill">
+            Delete Confirmation
+        </span>
+
+        <h1 class="page-title">
+            Hapus Laporan
+        </h1>
+
+        <p class="page-subtitle">
+            Periksa kembali data laporan sebelum menghapus. Tindakan ini akan
+            menghapus laporan dari sistem Navara City.
+        </p>
+    </div>
+
+    <div class="delete-report-header-card">
+        <i class="bi bi-trash3"></i>
+        <div>
+            <strong>Delete Mode</strong>
+            <span>Konfirmasi hapus</span>
+        </div>
+    </div>
+</section>
+
+<section class="delete-report-layout">
+    <article class="delete-report-card">
+        <div class="delete-report-warning-icon">
+            <i class="bi bi-exclamation-triangle"></i>
+        </div>
+
+        <span class="section-pill delete-report-danger-pill">
+            Warning
+        </span>
+
+        <h2>
+            Yakin ingin menghapus laporan ini?
+        </h2>
+
+        <p>
+            Data laporan yang sudah dihapus tidak akan tampil lagi pada halaman Reports,
+            Dashboard, maupun pencarian laporan.
+        </p>
+
+        <div class="delete-report-summary">
+            <div class="delete-summary-heading">
+                <i class="bi bi-file-earmark-text"></i>
+                <strong>Data yang akan dihapus</strong>
+            </div>
+
+            <div class="delete-summary-grid">
+                <div class="delete-summary-item delete-summary-title">
+                    <span>Judul Laporan</span>
+                    <strong>{{ report.title }}</strong>
+                </div>
+
+                <div class="delete-summary-item">
+                    <span>Kategori</span>
+                    <strong>{{ report.category }}</strong>
+                </div>
+
+                <div class="delete-summary-item">
+                    <span>Lokasi</span>
+                    <strong>{{ report.location }}</strong>
+                </div>
+
+                <div class="delete-summary-item">
+                    <span>Status</span>
+
+                    {% if report.status == 'DRAFT' %}
+                        <strong>
+                            <span class="report-status-pill report-status-draft">
+                                <span></span>
+                                Draft
+                            </span>
+                        </strong>
+                    {% elif report.status == 'REPORTED' %}
+                        <strong>
+                            <span class="report-status-pill report-status-reported">
+                                <span></span>
+                                Reported
+                            </span>
+                        </strong>
+                    {% elif report.status == 'VERIFIED' %}
+                        <strong>
+                            <span class="report-status-pill report-status-verified">
+                                <span></span>
+                                Verified
+                            </span>
+                        </strong>
+                    {% elif report.status == 'IN_PROGRESS' %}
+                        <strong>
+                            <span class="report-status-pill report-status-progress">
+                                <span></span>
+                                In Progress
+                            </span>
+                        </strong>
+                    {% elif report.status == 'RESOLVED' %}
+                        <strong>
+                            <span class="report-status-pill report-status-resolved">
+                                <span></span>
+                                Resolved
+                            </span>
+                        </strong>
+                    {% endif %}
+                </div>
+
+                <div class="delete-summary-item delete-summary-description">
+                    <span>Deskripsi</span>
+                    <strong>{{ report.description }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <form method="POST" id="deleteForm" class="delete-report-form">
+            {% csrf_token %}
+
+            <button type="submit" id="deleteBtn" class="delete-confirm-btn">
+                <i class="bi bi-trash3"></i>
+                Ya, Hapus Laporan
+            </button>
+
+            <a href="{% url 'report_list' %}" class="delete-cancel-btn">
+                <i class="bi bi-arrow-left"></i>
+                Batal
+            </a>
+        </form>
+    </article>
+
+    <aside class="delete-report-side-card">
+        <div class="delete-side-icon">
+            <i class="bi bi-shield-exclamation"></i>
+        </div>
+
+        <h3>
+            Perhatian
+        </h3>
+
+        <p>
+            Pastikan laporan yang dipilih memang sudah tidak diperlukan sebelum
+            menghapus data dari sistem.
+        </p>
+
+        <div class="delete-note-list">
+            <div class="delete-note-item">
+                <span>1</span>
+                <p>Data laporan akan hilang dari daftar laporan.</p>
+            </div>
+
+            <div class="delete-note-item">
+                <span>2</span>
+                <p>Data laporan tidak akan muncul pada hasil pencarian.</p>
+            </div>
+
+            <div class="delete-note-item">
+                <span>3</span>
+                <p>Statistik dashboard dapat berubah setelah data dihapus.</p>
+            </div>
+        </div>
+    </aside>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteForm = document.getElementById('deleteForm');
+    const deleteBtn = document.getElementById('deleteBtn');
+
+    if (!deleteForm || !deleteBtn) return;
+
+    deleteForm.addEventListener('submit', function () {
+        deleteBtn.disabled = true;
+        deleteBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Menghapus...
+        `;
+    });
+});
+</script>
+{% endblock %}

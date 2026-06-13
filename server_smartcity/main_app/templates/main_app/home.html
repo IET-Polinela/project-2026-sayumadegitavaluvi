@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports - Navara City{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Reports
+        </li>
+    </ol>
+</nav>
+
+<section class="page-header reports-page-header">
+    <div class="reports-header-content">
+        <span class="section-pill">
+            Issue Reporting
+        </span>
+
+        <h1 class="page-title">
+            Daftar Laporan
+        </h1>
+
+        <p class="page-subtitle">
+            Kelola dan pantau semua laporan Navara City dalam satu tampilan.
+            Gunakan pencarian untuk menemukan laporan berdasarkan judul, lokasi,
+            kategori, atau status.
+        </p>
+    </div>
+
+    <div class="reports-header-side">
+        <div class="reports-mini-info">
+            <i class="bi bi-clipboard2-check"></i>
+            <div>
+                <strong>Report Center</strong>
+                <span>Data laporan kota</span>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_report' %}" class="btn btn-brand reports-add-btn">
+                <i class="bi bi-plus-circle me-1"></i>
+                Tambah Laporan
+            </a>
+        {% else %}
+            <a href="/login/" class="btn btn-brand reports-add-btn">
+                <i class="bi bi-box-arrow-in-right me-1"></i>
+                Login untuk Lapor
+            </a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="reports-search-card">
+    <div class="reports-search-heading">
+        <div>
+            <span class="reports-search-label">
+                Live Search
+            </span>
+
+            <p>
+                Cari laporan secara cepat tanpa membuka halaman baru.
+            </p>
+        </div>
+    </div>
+
+    <div class="reports-search-wrapper">
+        <i class="bi bi-search"></i>
+
+        <input
+            type="text"
+            id="searchInput"
+            class="reports-search-input"
+            placeholder="Cari judul, kategori, lokasi, atau status..."
+        >
+    </div>
+</section>
+
+<input type="hidden" id="csrfTokenValue" value="{{ csrf_token }}">
+
+<section class="reports-table-card">
+    <div class="reports-table-toolbar">
+        <div>
+            <span class="section-pill">
+                Report List
+            </span>
+
+            <h2>
+                Data Laporan
+            </h2>
+        </div>
+
+        <span class="reports-table-note">
+            <i class="bi bi-info-circle"></i>
+            Status laporan diperbarui oleh admin.
+        </span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table reports-table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Judul</th>
+                    <th>Lokasi</th>
+                    <th>Status</th>
+                    <th class="reports-action-column">Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody id="reportTableBody">
+                {% for report in reports %}
+                    <tr>
+                        <td class="report-title-cell">
+                            <strong>{{ report.title }}</strong>
+                        </td>
+
+                        <td class="report-location-cell">
+                            <i class="bi bi-geo-alt"></i>
+                            {{ report.location }}
+                        </td>
+
+                        <td>
+                            {% if report.status == 'DRAFT' %}
+                                <span class="report-status-pill report-status-draft">
+                                    <span></span>
+                                    Draft
+                                </span>
+                            {% elif report.status == 'REPORTED' %}
+                                <span class="report-status-pill report-status-reported">
+                                    <span></span>
+                                    Reported
+                                </span>
+                            {% elif report.status == 'VERIFIED' %}
+                                <span class="report-status-pill report-status-verified">
+                                    <span></span>
+                                    Verified
+                                </span>
+                            {% elif report.status == 'IN_PROGRESS' %}
+                                <span class="report-status-pill report-status-progress">
+                                    <span></span>
+                                    In Progress
+                                </span>
+                            {% elif report.status == 'RESOLVED' %}
+                                <span class="report-status-pill report-status-resolved">
+                                    <span></span>
+                                    Resolved
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div class="reports-action-group">
+                                {% if user.is_authenticated and user.is_admin %}
+                                    {% if report.status == 'REPORTED' %}
+                                        <form method="POST" action="{% url 'update_status' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status menjadi Verified?')">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="status" value="VERIFIED">
+                                            <button type="submit" class="report-action-btn report-action-verify">
+                                                <i class="bi bi-check2-circle"></i>
+                                                Verifikasi
+                                            </button>
+                                        </form>
+                                    {% elif report.status == 'VERIFIED' %}
+                                        <form method="POST" action="{% url 'update_status' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status menjadi In Progress?')">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="status" value="IN_PROGRESS">
+                                            <button type="submit" class="report-action-btn report-action-progress">
+                                                <i class="bi bi-arrow-repeat"></i>
+                                                Progress
+                                            </button>
+                                        </form>
+                                    {% elif report.status == 'IN_PROGRESS' %}
+                                        <form method="POST" action="{% url 'update_status' report.id %}" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status menjadi Resolved?')">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="status" value="RESOLVED">
+                                            <button type="submit" class="report-action-btn report-action-resolved">
+                                                <i class="bi bi-check-circle"></i>
+                                                Selesai
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    <a href="{% url 'detail_report' report.id %}" class="report-action-btn report-action-detail">
+                                        <i class="bi bi-eye"></i>
+                                        Detail
+                                    </a>
+
+                                    <a href="{% url 'edit_report' report.id %}" class="report-action-btn report-action-edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                        Edit
+                                    </a>
+
+                                    <a href="{% url 'delete_report' report.id %}" class="report-action-btn report-action-delete">
+                                        <i class="bi bi-trash"></i>
+                                        Hapus
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'detail_report' report.id %}" class="report-action-btn report-action-detail">
+                                        <i class="bi bi-eye"></i>
+                                        Detail
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="reports-empty-row">
+                            Belum ada laporan.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('searchInput');
+    const reportTableBody = document.getElementById('reportTableBody');
+    const csrfToken = document.getElementById('csrfTokenValue').value;
+
+    let debounceTimer;
+
+    function getStatusClass(status) {
+        if (status === 'DRAFT') return 'report-status-pill report-status-draft';
+        if (status === 'REPORTED') return 'report-status-pill report-status-reported';
+        if (status === 'VERIFIED') return 'report-status-pill report-status-verified';
+        if (status === 'IN_PROGRESS') return 'report-status-pill report-status-progress';
+        if (status === 'RESOLVED') return 'report-status-pill report-status-resolved';
+        return 'report-status-pill';
+    }
+
+    function getStatusButtonClass(nextStatusValue) {
+        if (nextStatusValue === 'VERIFIED') return 'report-action-btn report-action-verify';
+        if (nextStatusValue === 'IN_PROGRESS') return 'report-action-btn report-action-progress';
+        if (nextStatusValue === 'RESOLVED') return 'report-action-btn report-action-resolved';
+        return 'report-action-btn report-action-detail';
+    }
+
+    function getStatusButtonIcon(nextStatusValue) {
+        if (nextStatusValue === 'VERIFIED') return '<i class="bi bi-check2-circle"></i>';
+        if (nextStatusValue === 'IN_PROGRESS') return '<i class="bi bi-arrow-repeat"></i>';
+        if (nextStatusValue === 'RESOLVED') return '<i class="bi bi-check-circle"></i>';
+        return '<i class="bi bi-arrow-right-circle"></i>';
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text ?? '';
+        return div.innerHTML;
+    }
+
+    function renderTableRows(results, isAdmin) {
+        if (!results.length) {
+            reportTableBody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="reports-empty-row">
+                        Data tidak ditemukan.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        reportTableBody.innerHTML = results.map(report => {
+            let actionButtons = '';
+
+            if (isAdmin && report.next_action) {
+                actionButtons += `
+                    <form method="POST" action="/reports/update-status/${report.id}/" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status menjadi ${escapeHtml(report.next_action.label)}?')">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+                        <input type="hidden" name="status" value="${escapeHtml(report.next_action.value)}">
+                        <button type="submit" class="${getStatusButtonClass(report.next_action.value)}">
+                            ${getStatusButtonIcon(report.next_action.value)}
+                            ${escapeHtml(report.next_action.label)}
+                        </button>
+                    </form>
+                `;
+            }
+
+            actionButtons += `
+                <a href="/reports/detail/${report.id}/" class="report-action-btn report-action-detail">
+                    <i class="bi bi-eye"></i>
+                    Detail
+                </a>
+            `;
+
+            if (isAdmin) {
+                actionButtons += `
+                    <a href="/reports/edit/${report.id}/" class="report-action-btn report-action-edit">
+                        <i class="bi bi-pencil-square"></i>
+                        Edit
+                    </a>
+
+                    <a href="/reports/delete/${report.id}/" class="report-action-btn report-action-delete">
+                        <i class="bi bi-trash"></i>
+                        Hapus
+                    </a>
+                `;
+            }
+
+            return `
+                <tr>
+                    <td class="report-title-cell">
+                        <strong>${escapeHtml(report.title)}</strong>
+                    </td>
+
+                    <td class="report-location-cell">
+                        <i class="bi bi-geo-alt"></i>
+                        ${escapeHtml(report.location)}
+                    </td>
+
+                    <td>
+                        <span class="${getStatusClass(report.status)}">
+                            <span></span>
+                            ${escapeHtml(report.status_display)}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="reports-action-group">
+                            ${actionButtons}
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    async function fetchReports(query = '') {
+        try {
+            const response = await fetch(`/reports/search/?q=${encodeURIComponent(query)}`);
+            const data = await response.json();
+
+            renderTableRows(data.results, data.is_admin);
+        } catch (error) {
+            console.error('Gagal mengambil data pencarian:', error);
+        }
+    }
+
+    searchInput.addEventListener('input', function () {
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(() => {
+            fetchReports(searchInput.value);
+        }, 300);
+    });
+});
+</script>
+{% endblock %}

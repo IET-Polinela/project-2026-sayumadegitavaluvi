@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+
+{% block title %}About - Navara City{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            About
+        </li>
+    </ol>
+</nav>
+
+<section class="page-header about-page-header">
+    <div class="about-header-content">
+        <span class="section-pill">
+            About Application
+        </span>
+
+        <h1 class="page-title">
+            Tentang Navara City
+        </h1>
+
+        <p class="page-subtitle">
+            Navara City adalah sistem pelaporan masalah perkotaan berbasis web
+            yang membantu proses pencatatan, pemantauan, dan pengelolaan laporan
+            agar lebih rapi, cepat, dan mudah dipahami.
+        </p>
+    </div>
+
+    <div class="about-header-card">
+        <i class="bi bi-buildings"></i>
+        <div>
+            <strong>Smart City Portal</strong>
+            <span>Sistem laporan kota</span>
+        </div>
+    </div>
+</section>
+
+<section class="about-main-grid">
+    <article class="about-info-card about-accent-card fade-item">
+        <div class="about-card-icon">
+            <i class="bi bi-info-circle"></i>
+        </div>
+
+        <span class="about-tagline">
+            “Membantu kota menjadi lebih tertata melalui laporan yang jelas.”
+        </span>
+
+        <h2>
+            Tentang Aplikasi
+        </h2>
+
+        <p>
+            Navara City digunakan untuk mencatat, menampilkan, dan memantau laporan
+            terkait permasalahan kota seperti jalan rusak, lampu jalan mati, sampah menumpuk,
+            drainase tersumbat, infrastruktur, dan gangguan lingkungan.
+        </p>
+
+        <p>
+            Setiap laporan memiliki status penanganan sehingga proses tindak lanjut dapat
+            dipantau secara lebih terarah, mulai dari laporan masuk sampai laporan selesai.
+        </p>
+    </article>
+
+    <article class="about-info-card fade-item">
+        <div class="about-card-icon">
+            <i class="bi bi-stars"></i>
+        </div>
+
+        <h2>
+            Fitur Utama
+        </h2>
+
+        <div class="about-feature-list">
+            <div class="about-feature-item">
+                <div class="about-feature-icon">
+                    <i class="bi bi-pencil-square"></i>
+                </div>
+
+                <div>
+                    <strong>Tambah Laporan</strong>
+                    <span>
+                        Admin dapat menginput judul, kategori, deskripsi, dan lokasi laporan.
+                    </span>
+                </div>
+            </div>
+
+            <div class="about-feature-item">
+                <div class="about-feature-icon">
+                    <i class="bi bi-arrow-repeat"></i>
+                </div>
+
+                <div>
+                    <strong>Status Laporan</strong>
+                    <span>
+                        Pantau proses laporan dari Reported, Verified, In Progress, sampai Resolved.
+                    </span>
+                </div>
+            </div>
+
+            <div class="about-feature-item">
+                <div class="about-feature-icon">
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <div>
+                    <strong>Live Search</strong>
+                    <span>
+                        Cari laporan berdasarkan judul, lokasi, kategori, atau status.
+                    </span>
+                </div>
+            </div>
+
+            <div class="about-feature-item">
+                <div class="about-feature-icon">
+                    <i class="bi bi-bar-chart-line"></i>
+                </div>
+
+                <div>
+                    <strong>Dashboard Statistik</strong>
+                    <span>
+                        Data laporan divisualisasikan melalui chart agar lebih mudah dianalisis.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </article>
+</section>
+
+<section class="about-section">
+    <div class="about-section-heading">
+        <span class="section-pill">
+            System Purpose
+        </span>
+
+        <h2>
+            Tujuan Pengembangan Sistem
+        </h2>
+
+        <p>
+            Sistem ini dibuat untuk mendukung proses pelaporan kota yang lebih transparan,
+            terstruktur, dan mudah digunakan.
+        </p>
+    </div>
+
+    <div class="about-purpose-grid">
+        <article class="about-purpose-card fade-item">
+            <div class="about-purpose-number">01</div>
+
+            <h3>
+                Mempermudah Pelaporan
+            </h3>
+
+            <p>
+                Masalah kota dapat dicatat dalam bentuk laporan digital yang tersimpan
+                dengan rapi di dalam sistem.
+            </p>
+        </article>
+
+        <article class="about-purpose-card fade-item">
+            <div class="about-purpose-number">02</div>
+
+            <h3>
+                Memantau Status
+            </h3>
+
+            <p>
+                Setiap laporan memiliki status sehingga proses penanganan dapat dilihat
+                secara jelas dan terarah.
+            </p>
+        </article>
+
+        <article class="about-purpose-card fade-item">
+            <div class="about-purpose-number">03</div>
+
+            <h3>
+                Menyajikan Data
+            </h3>
+
+            <p>
+                Dashboard membantu menampilkan ringkasan laporan berdasarkan status dan kategori.
+            </p>
+        </article>
+    </div>
+</section>
+
+<section class="about-section">
+    <div class="about-workflow-card fade-item">
+        <div class="about-workflow-content">
+            <span class="section-pill">
+                Workflow
+            </span>
+
+            <h2>
+                Alur Penggunaan Navara City
+            </h2>
+
+            <p>
+                Navara City memiliki alur sederhana agar laporan dapat diproses dengan lebih tertib.
+            </p>
+
+            <div class="about-workflow-list">
+                <div class="about-workflow-item">
+                    <span>1</span>
+
+                    <div>
+                        <strong>Laporan dibuat</strong>
+                        <p>
+                            Admin mengisi data laporan sesuai masalah yang ditemukan.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="about-workflow-item">
+                    <span>2</span>
+
+                    <div>
+                        <strong>Laporan diverifikasi</strong>
+                        <p>
+                            Laporan yang masuk diperiksa sebelum masuk tahap penanganan.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="about-workflow-item">
+                    <span>3</span>
+
+                    <div>
+                        <strong>Laporan diproses</strong>
+                        <p>
+                            Status berubah menjadi In Progress saat laporan sedang ditangani.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="about-workflow-item">
+                    <span>4</span>
+
+                    <div>
+                        <strong>Laporan selesai</strong>
+                        <p>
+                            Status Resolved digunakan ketika laporan sudah ditindaklanjuti.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-workflow-visual">
+            <i class="bi bi-diagram-3"></i>
+            <strong>4 Tahap</strong>
+            <span>Reported → Resolved</span>
+        </div>
+    </div>
+</section>
+
+<section class="about-section">
+    <div class="about-section-heading">
+        <span class="section-pill">
+            Developer Information
+        </span>
+
+        <h2>
+            Informasi Developer
+        </h2>
+
+        <p>
+            Informasi pengembang dan identitas project Navara City.
+        </p>
+    </div>
+
+    <div class="about-developer-grid">
+        <article class="about-developer-card fade-item">
+            <div class="about-developer-icon">
+                <i class="bi bi-person"></i>
+            </div>
+
+            <span>Nama</span>
+            <strong>Sayu Made Gita Valuvi</strong>
+        </article>
+
+        <article class="about-developer-card fade-item">
+            <div class="about-developer-icon">
+                <i class="bi bi-code-slash"></i>
+            </div>
+
+            <span>Role</span>
+            <strong>Web Developer</strong>
+        </article>
+
+        <article class="about-developer-card fade-item">
+            <div class="about-developer-icon">
+                <i class="bi bi-kanban"></i>
+            </div>
+
+            <span>Project</span>
+            <strong>Navara City Portal</strong>
+        </article>
+
+        <article class="about-developer-card fade-item">
+            <div class="about-developer-icon">
+                <i class="bi bi-building"></i>
+            </div>
+
+            <span>Institusi</span>
+            <strong>Politeknik Negeri Lampung</strong>
+        </article>
+    </div>
+</section>
+{% endblock %}

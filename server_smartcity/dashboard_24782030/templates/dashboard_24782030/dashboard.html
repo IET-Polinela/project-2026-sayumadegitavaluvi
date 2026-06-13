@@ -1,0 +1,608 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Navara City{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Dashboard
+        </li>
+    </ol>
+</nav>
+
+<div class="page-header dashboard-header-enhanced">
+    <div>
+        <span class="section-pill">Statistics Overview</span>
+        <h1 class="page-title">Dashboard Navara City</h1>
+        <p class="page-subtitle">
+            Pantau ringkasan laporan kota berdasarkan status, kategori, dan aktivitas
+            terbaru yang tersimpan di database.
+        </p>
+    </div>
+
+    <div class="dashboard-header-badge">
+        <i class="bi bi-activity"></i>
+        <div>
+            <strong>Live Data</strong>
+            <span>Terhubung ke sistem</span>
+        </div>
+    </div>
+</div>
+
+<section class="dashboard-stats-grid">
+    <div class="dashboard-stat-card dashboard-stat-total">
+        <div class="dashboard-stat-icon">
+            <i class="bi bi-bar-chart-line-fill"></i>
+        </div>
+        <div>
+            <h2 id="totalReports" data-dashboard-counter="0">0</h2>
+            <p>Total Laporan</p>
+        </div>
+    </div>
+
+    <div class="dashboard-stat-card dashboard-stat-draft">
+        <div class="dashboard-stat-icon">
+            <i class="bi bi-file-earmark-text"></i>
+        </div>
+        <div>
+            <h2 id="draftReports" data-dashboard-counter="0">0</h2>
+            <p>Draft</p>
+        </div>
+    </div>
+
+    <div class="dashboard-stat-card dashboard-stat-reported">
+        <div class="dashboard-stat-icon">
+            <i class="bi bi-megaphone-fill"></i>
+        </div>
+        <div>
+            <h2 id="reportedReports" data-dashboard-counter="0">0</h2>
+            <p>Reported</p>
+        </div>
+    </div>
+
+    <div class="dashboard-stat-card dashboard-stat-verified">
+        <div class="dashboard-stat-icon">
+            <i class="bi bi-patch-check-fill"></i>
+        </div>
+        <div>
+            <h2 id="verifiedReports" data-dashboard-counter="0">0</h2>
+            <p>Verified</p>
+        </div>
+    </div>
+
+    <div class="dashboard-stat-card dashboard-stat-progress">
+        <div class="dashboard-stat-icon">
+            <i class="bi bi-gear-fill"></i>
+        </div>
+        <div>
+            <h2 id="progressReports" data-dashboard-counter="0">0</h2>
+            <p>In Progress</p>
+        </div>
+    </div>
+
+    <div class="dashboard-stat-card dashboard-stat-resolved">
+        <div class="dashboard-stat-icon">
+            <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <div>
+            <h2 id="resolvedReports" data-dashboard-counter="0">0</h2>
+            <p>Resolved</p>
+        </div>
+    </div>
+</section>
+
+<section class="dashboard-main-grid">
+    <div class="dashboard-card dashboard-chart-card">
+        <div class="dashboard-card-header">
+            <div>
+                <span class="dashboard-card-label">Status Distribution</span>
+                <h5>Distribusi Status Laporan</h5>
+                <p>
+                    Perbandingan jumlah laporan berdasarkan tahapan penanganan.
+                </p>
+            </div>
+
+            <span class="dashboard-mini-badge">
+                <i class="bi bi-pie-chart-fill"></i>
+                Donut Chart
+            </span>
+        </div>
+
+        <div class="chart-wrap dashboard-chart-wrap">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+
+    <div class="dashboard-card dashboard-status-guide">
+        <div class="dashboard-card-header">
+            <div>
+                <span class="dashboard-card-label">Workflow Guide</span>
+                <h5>Alur Status</h5>
+                <p>
+                    Penjelasan singkat status laporan di Navara City.
+                </p>
+            </div>
+        </div>
+
+        <div class="dashboard-status-list">
+            <div class="dashboard-status-item">
+                <span class="dashboard-status-dot status-dot-reported"></span>
+                <div>
+                    <strong>Reported</strong>
+                    <p>Laporan baru masuk dan menunggu verifikasi.</p>
+                </div>
+            </div>
+
+            <div class="dashboard-status-item">
+                <span class="dashboard-status-dot status-dot-verified"></span>
+                <div>
+                    <strong>Verified</strong>
+                    <p>Laporan sudah diperiksa dan valid.</p>
+                </div>
+            </div>
+
+            <div class="dashboard-status-item">
+                <span class="dashboard-status-dot status-dot-progress"></span>
+                <div>
+                    <strong>In Progress</strong>
+                    <p>Laporan sedang dalam proses penanganan.</p>
+                </div>
+            </div>
+
+            <div class="dashboard-status-item">
+                <span class="dashboard-status-dot status-dot-resolved"></span>
+                <div>
+                    <strong>Resolved</strong>
+                    <p>Laporan telah selesai ditangani.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="dashboard-section">
+    <div class="dashboard-card dashboard-category-card">
+        <div class="dashboard-card-header">
+            <div>
+                <span class="dashboard-card-label">Category Insight</span>
+                <h5>Distribusi Kategori Laporan</h5>
+                <p>
+                    Jumlah laporan berdasarkan kategori masalah kota.
+                </p>
+            </div>
+
+            <span class="dashboard-mini-badge">
+                <i class="bi bi-bar-chart-fill"></i>
+                Bar Chart
+            </span>
+        </div>
+
+        <div class="chart-wrap dashboard-category-chart">
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+</section>
+
+<section class="dashboard-table-grid">
+    <div class="dashboard-card dashboard-table-card">
+        <div class="dashboard-card-header">
+            <div>
+                <span class="dashboard-card-label">Recent Reported</span>
+                <h5>5 Laporan Terakhir - Reported</h5>
+                <p>
+                    Laporan terbaru yang baru masuk ke sistem.
+                </p>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dashboard align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Judul</th>
+                        <th>Kategori</th>
+                        <th>Dibuat</th>
+                    </tr>
+                </thead>
+                <tbody id="latestReportedTable">
+                    <tr>
+                        <td colspan="3" class="empty-note">Memuat data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="dashboard-card dashboard-table-card">
+        <div class="dashboard-card-header">
+            <div>
+                <span class="dashboard-card-label">Recent Resolved</span>
+                <h5>5 Laporan Terakhir - Resolved</h5>
+                <p>
+                    Laporan terbaru yang sudah selesai ditangani.
+                </p>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-dashboard align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Judul</th>
+                        <th>Kategori</th>
+                        <th>Dibuat</th>
+                    </tr>
+                </thead>
+                <tbody id="latestResolvedTable">
+                    <tr>
+                        <td colspan="3" class="empty-note">Memuat data...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+    try {
+        const response = await fetch('/dashboard/data/');
+        const data = await response.json();
+
+        const statusCounter = {
+            DRAFT: 0,
+            REPORTED: 0,
+            VERIFIED: 0,
+            IN_PROGRESS: 0,
+            RESOLVED: 0
+        };
+
+        let statusChart = null;
+        let categoryChart = null;
+
+        function isDarkTheme() {
+            return document.documentElement.getAttribute('data-theme') === 'dark';
+        }
+
+        function getChartPalette() {
+            if (isDarkTheme()) {
+                return {
+                    text: '#e8f6f7',
+                    muted: '#a8c8cc',
+                    grid: 'rgba(255, 255, 255, 0.10)',
+                    tooltipBg: '#04191d',
+                    tooltipText: '#ffffff',
+                    donutBorder: '#09282e',
+                    barBackground: '#2e7e88',
+                    barBorder: '#66A5AD'
+                };
+            }
+
+            return {
+                text: '#16343a',
+                muted: '#5e7d83',
+                grid: 'rgba(7, 87, 91, 0.12)',
+                tooltipBg: '#003B46',
+                tooltipText: '#ffffff',
+                donutBorder: '#ffffff',
+                barBackground: '#66A5AD',
+                barBorder: '#07575B'
+            };
+        }
+
+        function normalizeStatus(status) {
+            return String(status || '')
+                .trim()
+                .toUpperCase()
+                .replaceAll(' ', '_')
+                .replaceAll('-', '_');
+        }
+
+        function formatStatus(status) {
+            const normalized = normalizeStatus(status);
+
+            if (normalized === 'DRAFT') return 'Draft';
+            if (normalized === 'REPORTED') return 'Reported';
+            if (normalized === 'VERIFIED') return 'Verified';
+            if (normalized === 'IN_PROGRESS') return 'In Progress';
+            if (normalized === 'RESOLVED') return 'Resolved';
+
+            return status;
+        }
+
+        function getStatusColor(status) {
+            const normalized = normalizeStatus(status);
+
+            if (normalized === 'DRAFT') return '#9AA7A2';
+            if (normalized === 'REPORTED') return '#F6C453';
+            if (normalized === 'VERIFIED') return '#07575B';
+            if (normalized === 'IN_PROGRESS') return '#66A5AD';
+            if (normalized === 'RESOLVED') return '#00A676';
+
+            return '#66A5AD';
+        }
+
+        function setCounter(id, value) {
+            const element = document.getElementById(id);
+            if (!element) return;
+
+            element.dataset.dashboardCounter = value || 0;
+            element.textContent = value || 0;
+        }
+
+        function animateDashboardCounters() {
+            const counters = document.querySelectorAll('[data-dashboard-counter]');
+
+            counters.forEach(counter => {
+                const target = Number(counter.dataset.dashboardCounter || 0);
+                const duration = 850;
+                const start = performance.now();
+
+                function update(now) {
+                    const progress = Math.min((now - start) / duration, 1);
+                    const current = Math.floor(progress * target);
+
+                    counter.textContent = current;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    } else {
+                        counter.textContent = target;
+                    }
+                }
+
+                requestAnimationFrame(update);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text ?? '';
+            return div.innerHTML;
+        }
+
+        if (Array.isArray(data.status_distribution)) {
+            data.status_distribution.forEach(item => {
+                const normalized = normalizeStatus(item.status);
+                statusCounter[normalized] = item.total;
+            });
+        }
+
+        setCounter('totalReports', data.total_reports);
+        setCounter('draftReports', statusCounter.DRAFT);
+        setCounter('reportedReports', statusCounter.REPORTED);
+        setCounter('verifiedReports', statusCounter.VERIFIED);
+        setCounter('progressReports', statusCounter.IN_PROGRESS);
+        setCounter('resolvedReports', statusCounter.RESOLVED);
+
+        animateDashboardCounters();
+
+        const statusDistribution = Array.isArray(data.status_distribution) ? data.status_distribution : [];
+        const categoryDistribution = Array.isArray(data.category_distribution) ? data.category_distribution : [];
+
+        const statusLabels = statusDistribution.map(item => formatStatus(item.status));
+        const statusTotals = statusDistribution.map(item => item.total);
+        const statusColors = statusDistribution.map(item => getStatusColor(item.status));
+
+        const categoryLabels = categoryDistribution.map(item => item.category);
+        const categoryTotals = categoryDistribution.map(item => item.total);
+        const originalCategoryTotals = [...categoryTotals];
+
+        const palette = getChartPalette();
+
+        statusChart = new Chart(document.getElementById('statusChart'), {
+            type: 'doughnut',
+            data: {
+                labels: statusLabels,
+                datasets: [{
+                    label: 'Jumlah Laporan',
+                    data: statusTotals,
+                    backgroundColor: statusColors,
+                    borderColor: palette.donutBorder,
+                    borderWidth: 4,
+                    hoverOffset: 14
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '62%',
+                rotation: -90,
+                animation: {
+                    animateRotate: true,
+                    animateScale: true,
+                    duration: 1800,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 18,
+                            color: palette.text,
+                            font: {
+                                weight: '700'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: palette.tooltipBg,
+                        titleColor: palette.tooltipText,
+                        bodyColor: palette.tooltipText,
+                        padding: 12,
+                        cornerRadius: 12
+                    }
+                }
+            }
+        });
+
+        categoryChart = new Chart(document.getElementById('categoryChart'), {
+            type: 'bar',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    label: 'Jumlah Laporan',
+                    data: categoryTotals,
+                    backgroundColor: palette.barBackground,
+                    borderColor: palette.barBorder,
+                    borderWidth: 1,
+                    borderRadius: 12,
+                    maxBarThickness: 54
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 1800,
+                    easing: 'easeOutBounce'
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: palette.text,
+                            font: {
+                                weight: '700'
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0,
+                            color: palette.muted
+                        },
+                        grid: {
+                            color: palette.grid
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: palette.tooltipBg,
+                        titleColor: palette.tooltipText,
+                        bodyColor: palette.tooltipText,
+                        padding: 12,
+                        cornerRadius: 12
+                    }
+                }
+            }
+        });
+
+        setInterval(function () {
+            if (!statusChart) return;
+
+            statusChart.options.rotation = statusChart.options.rotation + 35;
+            statusChart.update();
+        }, 4500);
+
+        setInterval(function () {
+            if (!categoryChart) return;
+
+            categoryChart.data.datasets[0].data = originalCategoryTotals.map(() => 0);
+            categoryChart.update();
+
+            setTimeout(function () {
+                categoryChart.data.datasets[0].data = originalCategoryTotals;
+                categoryChart.update();
+            }, 350);
+        }, 7000);
+
+        function updateChartTheme() {
+            if (!statusChart || !categoryChart) return;
+
+            const currentPalette = getChartPalette();
+
+            statusChart.data.datasets[0].borderColor = currentPalette.donutBorder;
+            statusChart.options.plugins.legend.labels.color = currentPalette.text;
+            statusChart.options.plugins.tooltip.backgroundColor = currentPalette.tooltipBg;
+            statusChart.options.plugins.tooltip.titleColor = currentPalette.tooltipText;
+            statusChart.options.plugins.tooltip.bodyColor = currentPalette.tooltipText;
+
+            categoryChart.data.datasets[0].backgroundColor = currentPalette.barBackground;
+            categoryChart.data.datasets[0].borderColor = currentPalette.barBorder;
+            categoryChart.options.scales.x.ticks.color = currentPalette.text;
+            categoryChart.options.scales.y.ticks.color = currentPalette.muted;
+            categoryChart.options.scales.y.grid.color = currentPalette.grid;
+            categoryChart.options.plugins.tooltip.backgroundColor = currentPalette.tooltipBg;
+            categoryChart.options.plugins.tooltip.titleColor = currentPalette.tooltipText;
+            categoryChart.options.plugins.tooltip.bodyColor = currentPalette.tooltipText;
+
+            statusChart.update();
+            categoryChart.update();
+        }
+
+        const themeObserver = new MutationObserver(function () {
+            updateChartTheme();
+        });
+
+        themeObserver.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+
+        const latestReportedTable = document.getElementById('latestReportedTable');
+        latestReportedTable.innerHTML = '';
+
+        if (!data.latest_reported || data.latest_reported.length === 0) {
+            latestReportedTable.innerHTML = `
+                <tr>
+                    <td colspan="3" class="empty-note">Tidak ada data reported.</td>
+                </tr>
+            `;
+        } else {
+            data.latest_reported.forEach(item => {
+                latestReportedTable.innerHTML += `
+                    <tr>
+                        <td><strong>${escapeHtml(item.title)}</strong></td>
+                        <td>${escapeHtml(item.category)}</td>
+                        <td>${escapeHtml(item.created_at)}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        const latestResolvedTable = document.getElementById('latestResolvedTable');
+        latestResolvedTable.innerHTML = '';
+
+        if (!data.latest_resolved || data.latest_resolved.length === 0) {
+            latestResolvedTable.innerHTML = `
+                <tr>
+                    <td colspan="3" class="empty-note">Tidak ada data resolved.</td>
+                </tr>
+            `;
+        } else {
+            data.latest_resolved.forEach(item => {
+                latestResolvedTable.innerHTML += `
+                    <tr>
+                        <td><strong>${escapeHtml(item.title)}</strong></td>
+                        <td>${escapeHtml(item.category)}</td>
+                        <td>${escapeHtml(item.created_at)}</td>
+                    </tr>
+                `;
+            });
+        }
+
+    } catch (error) {
+        console.error('Gagal mengambil data dashboard:', error);
+    }
+});
+</script>
+{% endblock %}

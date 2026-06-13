@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+
+{% block title %}Tambah Laporan - Navara City{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'report_list' %}">Reports</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Tambah Laporan
+        </li>
+    </ol>
+</nav>
+
+<section class="page-header report-form-header">
+    <div class="report-form-header-content">
+        <span class="section-pill">
+            Create Report
+        </span>
+
+        <h1 class="page-title">
+            Tambah Laporan
+        </h1>
+
+        <p class="page-subtitle">
+            Isi data laporan Navara City dengan lengkap agar laporan mudah diverifikasi,
+            diproses, dan dipantau melalui dashboard.
+        </p>
+    </div>
+
+    <div class="report-form-header-card">
+        <i class="bi bi-plus-circle"></i>
+        <div>
+            <strong>New Report</strong>
+            <span>Input data laporan</span>
+        </div>
+    </div>
+</section>
+
+<section class="report-form-layout">
+    <div class="report-form-card">
+        <div class="report-form-card-heading">
+            <span class="section-pill">
+                Form Laporan
+            </span>
+
+            <h2>
+                Data Laporan Kota
+            </h2>
+
+            <p>
+                Pastikan judul, kategori, lokasi, dan deskripsi laporan sudah sesuai
+                sebelum disimpan.
+            </p>
+        </div>
+
+        <form method="POST" id="reportForm" class="create-report-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="report-form-alert">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="report-input-group">
+                <label for="{{ form.title.id_for_label }}">
+                    Judul Laporan
+                </label>
+
+                <div class="report-input-wrapper">
+                    <i class="bi bi-pencil-square"></i>
+                    {{ form.title }}
+                </div>
+
+                {% if form.title.errors %}
+                    <div class="report-field-error">
+                        {{ form.title.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="report-input-group">
+                <label for="{{ form.category.id_for_label }}">
+                    Kategori
+                </label>
+
+                <div class="report-input-wrapper">
+                    <i class="bi bi-tags"></i>
+                    {{ form.category }}
+                </div>
+
+                {% if form.category.errors %}
+                    <div class="report-field-error">
+                        {{ form.category.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="report-input-group">
+                <label for="{{ form.location.id_for_label }}">
+                    Lokasi
+                </label>
+
+                <div class="report-input-wrapper">
+                    <i class="bi bi-geo-alt"></i>
+                    {{ form.location }}
+                </div>
+
+                {% if form.location.errors %}
+                    <div class="report-field-error">
+                        {{ form.location.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="report-input-group">
+                <label for="{{ form.description.id_for_label }}">
+                    Deskripsi
+                </label>
+
+                <div class="report-textarea-wrapper">
+                    {{ form.description }}
+                </div>
+
+                {% if form.description.errors %}
+                    <div class="report-field-error">
+                        {{ form.description.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="report-form-actions">
+                <button type="submit" id="submitBtn" class="report-submit-btn">
+                    <i class="bi bi-save"></i>
+                    Simpan Laporan
+                </button>
+
+                <a href="{% url 'report_list' %}" class="report-back-btn">
+                    <i class="bi bi-arrow-left"></i>
+                    Kembali
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <aside class="report-form-side">
+        <div class="report-form-side-card">
+            <div class="report-form-side-icon">
+                <i class="bi bi-lightbulb"></i>
+            </div>
+
+            <h3>
+                Panduan Pengisian
+            </h3>
+
+            <p>
+                Laporan yang jelas akan membantu proses verifikasi dan penanganan
+                menjadi lebih cepat.
+            </p>
+
+            <div class="report-form-guide-list">
+                <div class="report-form-guide-item">
+                    <span>1</span>
+                    <div>
+                        <strong>Gunakan judul singkat</strong>
+                        <p>Tulis judul yang langsung menjelaskan masalah.</p>
+                    </div>
+                </div>
+
+                <div class="report-form-guide-item">
+                    <span>2</span>
+                    <div>
+                        <strong>Pilih kategori sesuai</strong>
+                        <p>Pastikan kategori laporan tidak tertukar.</p>
+                    </div>
+                </div>
+
+                <div class="report-form-guide-item">
+                    <span>3</span>
+                    <div>
+                        <strong>Tulis lokasi dengan jelas</strong>
+                        <p>Masukkan nama jalan, area, atau titik lokasi.</p>
+                    </div>
+                </div>
+
+                <div class="report-form-guide-item">
+                    <span>4</span>
+                    <div>
+                        <strong>Lengkapi deskripsi</strong>
+                        <p>Jelaskan kondisi masalah secara singkat dan lengkap.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-form-status-card">
+            <span class="section-pill">
+                Default Status
+            </span>
+
+            <h3>
+                Reported
+            </h3>
+
+            <p>
+                Setelah laporan disimpan, laporan akan masuk ke daftar laporan dan
+                siap diproses oleh admin.
+            </p>
+        </div>
+    </aside>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const reportForm = document.getElementById('reportForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (!reportForm || !submitBtn) return;
+
+    reportForm.addEventListener('submit', function () {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Menyimpan...
+        `;
+    });
+});
+</script>
+{% endblock %}

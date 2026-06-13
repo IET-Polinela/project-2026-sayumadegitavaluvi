@@ -1,0 +1,363 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Navara City{% endblock %}
+
+{% block hero %}
+<section class="hero-section home-hero">
+    <div class="home-hero-pattern"></div>
+
+    <div class="home-hero-inner">
+        <div class="home-hero-copy">
+            <span class="hero-kicker home-hero-kicker">
+                Smart City Issue Reporting
+            </span>
+
+            <h1 class="hero-title home-hero-title">
+                Laporkan. Pantau.
+                <span>Selesaikan.</span>
+            </h1>
+
+            <p class="hero-text home-hero-text">
+                Navara City — Platform pelaporan masalah kota yang cepat, transparan,
+                dan terpercaya untuk membantu proses pencatatan serta pemantauan laporan
+                secara lebih terstruktur.
+            </p>
+
+            <div class="home-hero-actions">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'add_report' %}" class="btn btn-light hero-btn">
+                        Buat Laporan
+                    </a>
+                {% else %}
+                    <a href="/login/" class="btn btn-light hero-btn">
+                        Login untuk Lapor
+                    </a>
+                {% endif %}
+
+                <a href="{% url 'report_list' %}" class="btn btn-brand-outline hero-btn">
+                    Lihat Laporan
+                </a>
+            </div>
+        </div>
+
+        <aside class="home-floating-card">
+            <div class="home-floating-icon">
+                <i class="bi bi-clipboard2-check"></i>
+            </div>
+
+            <div class="home-floating-content">
+                <span class="home-floating-label">
+                    Laporan Aktif
+                </span>
+
+                <strong class="home-floating-number" data-counter data-target="{{ total_reports|default:'0' }}">
+                    {{ total_reports|default:"0" }}
+                </strong>
+
+                <p>
+                    Data laporan yang masuk ke sistem Navara City.
+                </p>
+            </div>
+        </aside>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="home-overview-section">
+    <div class="page-header home-overview-header">
+        <span class="section-pill">
+            Platform Overview
+        </span>
+
+        <h1 class="page-title">
+            Sistem Pelaporan Navara City
+        </h1>
+
+        <p class="page-subtitle">
+            Navara City membantu admin dan warga memantau laporan masalah kota
+            melalui data yang tersusun, status yang jelas, dan dashboard yang mudah dipahami.
+        </p>
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="home-section-heading">
+        <span class="section-pill">
+            Cara Kerja
+        </span>
+
+        <h2>
+            Alur Laporan yang Lebih Terarah
+        </h2>
+
+        <p>
+            Setiap laporan memiliki proses yang jelas, mulai dari pembuatan laporan
+            hingga penyelesaian masalah.
+        </p>
+    </div>
+
+    <div class="home-steps-grid">
+        <article class="home-step-card fade-item">
+            <span class="home-step-watermark">1</span>
+
+            <div class="home-step-icon">
+                📝
+            </div>
+
+            <h3>
+                Buat Laporan
+            </h3>
+
+            <p>
+                Masukkan judul, kategori, lokasi, dan deskripsi masalah kota
+                agar laporan mudah dipahami.
+            </p>
+        </article>
+
+        <div class="home-step-arrow">
+            →
+        </div>
+
+        <article class="home-step-card fade-item">
+            <span class="home-step-watermark">2</span>
+
+            <div class="home-step-icon">
+                🔍
+            </div>
+
+            <h3>
+                Pantau Progress
+            </h3>
+
+            <p>
+                Status laporan dapat dipantau dari Reported, Verified,
+                In Progress, hingga Resolved.
+            </p>
+        </article>
+
+        <div class="home-step-arrow">
+            →
+        </div>
+
+        <article class="home-step-card fade-item">
+            <span class="home-step-watermark">3</span>
+
+            <div class="home-step-icon">
+                ✅
+            </div>
+
+            <h3>
+                Masalah Terselesaikan
+            </h3>
+
+            <p>
+                Laporan yang sudah ditangani akan ditandai sebagai Resolved
+                agar proses penanganan lebih jelas.
+            </p>
+        </article>
+    </div>
+</section>
+
+<section class="home-section home-stats-section">
+    <div class="home-section-heading">
+        <span class="section-pill">
+            Live Stats
+        </span>
+
+        <h2>
+            Statistik Navara City
+        </h2>
+
+        <p>
+            Ringkasan data laporan ditampilkan untuk memberikan gambaran cepat
+            mengenai kondisi laporan di sistem.
+        </p>
+    </div>
+
+    <div class="home-stats-grid">
+        <div class="home-stat-pill fade-item">
+            <strong data-counter data-target="{{ total_reports|default:'0' }}">
+                {{ total_reports|default:"0" }}
+            </strong>
+            <span>Total Laporan</span>
+        </div>
+
+        <div class="home-stat-pill fade-item">
+            <strong data-counter data-target="{{ resolved_reports|default:'0' }}">
+                {{ resolved_reports|default:"0" }}
+            </strong>
+            <span>Resolved</span>
+        </div>
+
+        <div class="home-stat-pill fade-item">
+            <strong data-counter data-target="{{ in_progress_reports|default:'0' }}">
+                {{ in_progress_reports|default:"0" }}
+            </strong>
+            <span>Dalam Proses</span>
+        </div>
+
+        <div class="home-stat-pill fade-item">
+            <strong data-counter data-target="{{ active_categories|default:'0' }}">
+                {{ active_categories|default:"0" }}
+            </strong>
+            <span>Kategori Aktif</span>
+        </div>
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="home-section-heading">
+        <span class="section-pill">
+            Kategori Laporan
+        </span>
+
+        <h2>
+            Jenis Masalah yang Dikelola
+        </h2>
+
+        <p>
+            Laporan dikelompokkan berdasarkan kategori agar data lebih mudah dicari,
+            dipantau, dan ditindaklanjuti.
+        </p>
+    </div>
+
+    <div class="home-category-grid">
+        <a href="/reports/?category=Jalan%20Rusak" class="home-category-card category-road fade-item">
+            <span class="home-category-icon">🚧</span>
+            <h3>Jalan Rusak</h3>
+            <p>{{ road_reports|default:"0" }} laporan</p>
+        </a>
+
+        <a href="/reports/?category=Lampu%20Jalan" class="home-category-card category-lamp fade-item">
+            <span class="home-category-icon">💡</span>
+            <h3>Lampu Jalan</h3>
+            <p>{{ lamp_reports|default:"0" }} laporan</p>
+        </a>
+
+        <a href="/reports/?category=Drainase" class="home-category-card category-drainage fade-item">
+            <span class="home-category-icon">🌊</span>
+            <h3>Drainase</h3>
+            <p>{{ drainage_reports|default:"0" }} laporan</p>
+        </a>
+
+        <a href="/reports/?category=Sampah" class="home-category-card category-trash fade-item">
+            <span class="home-category-icon">🗑️</span>
+            <h3>Sampah</h3>
+            <p>{{ trash_reports|default:"0" }} laporan</p>
+        </a>
+
+        <a href="/reports/?category=Keamanan" class="home-category-card category-security fade-item">
+            <span class="home-category-icon">🔒</span>
+            <h3>Keamanan</h3>
+            <p>{{ security_reports|default:"0" }} laporan</p>
+        </a>
+
+        <a href="/reports/?category=Lainnya" class="home-category-card category-other fade-item">
+            <span class="home-category-icon">📋</span>
+            <h3>Lainnya</h3>
+            <p>{{ other_reports|default:"0" }} laporan</p>
+        </a>
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="home-section-heading home-feed-heading">
+        <div>
+            <span class="section-pill">
+                Laporan Terbaru
+            </span>
+
+            <h2>
+                Aktivitas Terbaru
+            </h2>
+
+            <p>
+                Beberapa laporan terbaru yang masuk ke sistem Navara City.
+            </p>
+        </div>
+
+        <a href="{% url 'report_list' %}" class="home-view-all-link">
+            Lihat Semua
+        </a>
+    </div>
+
+    <div class="home-feed-grid">
+        {% if recent_reports %}
+            {% for report in recent_reports|slice:":3" %}
+                <article class="home-feed-card fade-item">
+                    <div class="home-feed-top">
+                        {% if report.status == 'DRAFT' %}
+                            <span class="home-status-pill status-draft">Draft</span>
+                        {% elif report.status == 'REPORTED' %}
+                            <span class="home-status-pill status-reported-home">Reported</span>
+                        {% elif report.status == 'VERIFIED' %}
+                            <span class="home-status-pill status-verified-home">Verified</span>
+                        {% elif report.status == 'IN_PROGRESS' %}
+                            <span class="home-status-pill status-progress-home">In Progress</span>
+                        {% elif report.status == 'RESOLVED' %}
+                            <span class="home-status-pill status-resolved-home">Resolved</span>
+                        {% endif %}
+
+                        {% if report.created_at %}
+                            <small>{{ report.created_at|timesince }} lalu</small>
+                        {% else %}
+                            <small>Baru saja</small>
+                        {% endif %}
+                    </div>
+
+                    <h3>
+                        {{ report.title }}
+                    </h3>
+
+                    <p>
+                        <i class="bi bi-geo-alt"></i>
+                        {{ report.location }}
+                    </p>
+                </article>
+            {% endfor %}
+        {% else %}
+            <article class="home-empty-feed">
+                <i class="bi bi-inbox"></i>
+                <h3>Belum ada laporan terbaru</h3>
+                <p>
+                    Data laporan terbaru akan muncul di bagian ini setelah tersedia di database.
+                </p>
+            </article>
+        {% endif %}
+    </div>
+</section>
+
+<section class="home-bottom-cta">
+    <div class="home-bottom-cta-content">
+        <span class="hero-kicker">
+            Navara City Portal
+        </span>
+
+        <h2>
+            Siap Melaporkan Masalah di Navara City?
+        </h2>
+
+        <p>
+            Gunakan halaman Reports untuk melihat daftar laporan, membuat laporan baru,
+            memeriksa detail, dan memantau perkembangan laporan kota.
+        </p>
+
+        <div class="home-bottom-actions">
+            {% if user.is_authenticated %}
+                <a href="{% url 'add_report' %}" class="btn btn-light hero-btn">
+                    Buat Laporan
+                </a>
+            {% else %}
+                <a href="/login/" class="btn btn-light hero-btn">
+                    Login untuk Lapor
+                </a>
+            {% endif %}
+
+            <a href="{% url 'report_list' %}" class="btn btn-brand-outline hero-btn">
+                Lihat Semua Laporan
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

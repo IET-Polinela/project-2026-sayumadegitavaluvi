@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Warga - Smart Pixie Hollow City</title>
+    <title>Portal Warga - Smart Navara City</title>
+
+    <script>
+        try {
+            const savedFrontendTheme = localStorage.getItem('navaraFrontendTheme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedFrontendTheme);
+        } catch (error) {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+    </script>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -356,6 +365,232 @@
             box-shadow: var(--shadow-soft);
         }
 
+
+        /* Dark / Light Toggle */
+        .theme-toggle-frontend {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-width: 98px;
+            min-height: 42px;
+            margin-right: 10px;
+            padding: 10px 18px;
+            border: 1px solid rgba(255,255,255,0.24);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.14);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 800;
+            transition: all 0.22s ease;
+        }
+
+        .theme-toggle-frontend:hover {
+            background: rgba(255,255,255,0.22);
+            transform: translateY(-2px);
+        }
+
+        .theme-toggle-frontend i {
+            font-size: 14px;
+        }
+
+        /* Dark Mode */
+        html[data-theme="dark"] {
+            --teal-dark: #04191d;
+            --teal-main: #0b3c43;
+            --teal-soft: #2e7e88;
+            --mint: #143b42;
+            --mint-light: #102f35;
+            --page-bg: #061a1f;
+            --text-main: #e8f6f7;
+            --text-muted: #a8c8cc;
+            --line-soft: rgba(255,255,255,0.12);
+            --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.34);
+            --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.28);
+        }
+
+        html[data-theme="dark"] body {
+            color: var(--text-main);
+            background:
+                radial-gradient(circle at top left, rgba(46, 126, 136, 0.20) 0%, transparent 28%),
+                radial-gradient(circle at bottom right, rgba(102, 165, 173, 0.12) 0%, transparent 30%),
+                linear-gradient(180deg, #061a1f 0%, #09282e 52%, #05161a 100%);
+        }
+
+        html[data-theme="dark"] body::before {
+            background-image:
+                linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+        }
+
+        html[data-theme="dark"] .navbar-custom {
+            background:
+                linear-gradient(90deg, rgba(4, 25, 29, 0.98), rgba(8, 47, 53, 0.96)),
+                radial-gradient(circle at top right, rgba(102, 165, 173, 0.18), transparent 30%);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.36);
+        }
+
+        html[data-theme="dark"] .brand-mark,
+        html[data-theme="dark"] .theme-toggle-frontend {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.20);
+            color: #ffffff;
+        }
+
+        html[data-theme="dark"] #logout-btn-navbar {
+            background: rgba(255,255,255,0.92);
+            color: #04191d;
+        }
+
+        html[data-theme="dark"] .soft-card,
+        html[data-theme="dark"] .login-card,
+        html[data-theme="dark"] .report-card,
+        html[data-theme="dark"] .modal-content {
+            background: linear-gradient(180deg, rgba(16, 54, 61, 0.96), rgba(9, 38, 43, 0.96)) !important;
+            border-color: rgba(255,255,255,0.10) !important;
+            box-shadow: var(--shadow-card) !important;
+            color: var(--text-main);
+        }
+
+        html[data-theme="dark"] .dashboard-hero,
+        html[data-theme="dark"] .login-info,
+        html[data-theme="dark"] .modal-header-custom {
+            background:
+                radial-gradient(circle at top right, rgba(102, 165, 173, 0.18), transparent 34%),
+                linear-gradient(135deg, #04191d, #0b3c43 60%, #2e7e88);
+            color: #ffffff;
+            box-shadow: var(--shadow-soft);
+        }
+
+        html[data-theme="dark"] .summary-row,
+        html[data-theme="dark"] .input-group-text,
+        html[data-theme="dark"] .pagination .page-link {
+            background: rgba(255,255,255,0.07) !important;
+            border-color: rgba(255,255,255,0.12) !important;
+            color: var(--text-main) !important;
+        }
+
+        html[data-theme="dark"] h1,
+        html[data-theme="dark"] h2,
+        html[data-theme="dark"] h3,
+        html[data-theme="dark"] h4,
+        html[data-theme="dark"] h5,
+        html[data-theme="dark"] h6,
+        html[data-theme="dark"] .summary-label,
+        html[data-theme="dark"] .fw-bold,
+        html[data-theme="dark"] .fw-semibold,
+        html[data-theme="dark"] .navbar-brand,
+        html[data-theme="dark"] .report-card h5 {
+            color: var(--text-main) !important;
+        }
+
+        html[data-theme="dark"] p,
+        html[data-theme="dark"] small,
+        html[data-theme="dark"] .text-muted,
+        html[data-theme="dark"] .small-muted,
+        html[data-theme="dark"] .hero-subtitle {
+            color: var(--text-muted) !important;
+        }
+
+        html[data-theme="dark"] .dashboard-hero *,
+        html[data-theme="dark"] .login-info *,
+        html[data-theme="dark"] .modal-header-custom *,
+        html[data-theme="dark"] .navbar-custom * {
+            color: #ffffff;
+        }
+
+        html[data-theme="dark"] .btn-light,
+        html[data-theme="dark"] .btn-light * {
+            background: #ffffff !important;
+            color: #04191d !important;
+            border-color: #ffffff !important;
+        }
+
+        html[data-theme="dark"] .btn-primary {
+            background: linear-gradient(135deg, #0b3c43, #2e7e88) !important;
+            color: #ffffff !important;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.26);
+        }
+
+        html[data-theme="dark"] .btn-outline-primary {
+            color: #d7f4f6 !important;
+            background: rgba(255,255,255,0.07) !important;
+            border-color: rgba(255,255,255,0.18) !important;
+        }
+
+        html[data-theme="dark"] .btn-outline-primary:hover {
+            color: #ffffff !important;
+            background: #2e7e88 !important;
+            border-color: #2e7e88 !important;
+        }
+
+        html[data-theme="dark"] .btn-outline-secondary {
+            color: #d7f4f6 !important;
+            border-color: rgba(255,255,255,0.18) !important;
+            background: rgba(255,255,255,0.06) !important;
+        }
+
+        html[data-theme="dark"] .form-control,
+        html[data-theme="dark"] .form-select {
+            background-color: rgba(255,255,255,0.08) !important;
+            border-color: rgba(255,255,255,0.14) !important;
+            color: var(--text-main) !important;
+        }
+
+        html[data-theme="dark"] .form-control::placeholder {
+            color: rgba(232,246,247,0.55);
+        }
+
+        html[data-theme="dark"] .form-control:focus,
+        html[data-theme="dark"] .form-select:focus {
+            background-color: rgba(255,255,255,0.12) !important;
+            border-color: rgba(102,165,173,0.72) !important;
+            box-shadow: 0 0 0 0.22rem rgba(102,165,173,0.16);
+            color: #ffffff !important;
+        }
+
+        html[data-theme="dark"] .report-icon,
+        html[data-theme="dark"] .profile-avatar {
+            background:
+                radial-gradient(circle at top right, rgba(255,255,255,0.20), transparent 40%),
+                linear-gradient(135deg, #0b3c43, #2e7e88);
+            color: #ffffff;
+        }
+
+        html[data-theme="dark"] .progress {
+            background-color: rgba(255,255,255,0.10);
+        }
+
+        html[data-theme="dark"] .pagination .active .page-link {
+            background: #2e7e88 !important;
+            border-color: #2e7e88 !important;
+            color: #ffffff !important;
+        }
+
+        html[data-theme="dark"] .report-card .badge[style] {
+            background: rgba(102, 165, 173, 0.18) !important;
+            color: #d7f4f6 !important;
+            border: 1px solid rgba(102, 165, 173, 0.24);
+        }
+
+        html[data-theme="dark"] .text-primary {
+            color: #8fd6de !important;
+        }
+
+        html[data-theme="dark"] .text-dark:not(.badge) {
+            color: var(--text-main) !important;
+        }
+
+        html[data-theme="dark"] hr {
+            border-color: rgba(255,255,255,0.14);
+            opacity: 1;
+        }
+
+        html[data-theme="dark"] .alert,
+        html[data-theme="dark"] .text-center.text-muted {
+            color: var(--text-muted) !important;
+        }
+
         @media (max-width: 991px) {
             .dashboard-hero {
                 padding: 1.15rem;
@@ -377,10 +612,15 @@
                 <span class="brand-mark">
                     <i class="bi bi-buildings-fill fs-4"></i>
                 </span>
-                <span>Smart Pixie Hollow City Portal</span>
+                <span>Smart Navara City Portal</span>
             </a>
 
-            <div class="ms-auto">
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <button class="theme-toggle-frontend" id="themeToggleFrontend" type="button">
+                    <i class="bi bi-moon-stars" id="themeToggleFrontendIcon"></i>
+                    <span id="themeToggleFrontendText">Dark</span>
+                </button>
+
                 <button id="logout-btn-navbar">
                     <i class="bi bi-box-arrow-right me-1"></i>
                     Logout
@@ -464,6 +704,55 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const themeButton = document.getElementById('themeToggleFrontend');
+            const themeIcon = document.getElementById('themeToggleFrontendIcon');
+            const themeText = document.getElementById('themeToggleFrontendText');
+
+            let currentTheme = 'light';
+
+            try {
+                currentTheme = localStorage.getItem('navaraFrontendTheme') || 'light';
+            } catch (error) {
+                currentTheme = 'light';
+            }
+
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            updateThemeButton(currentTheme);
+
+            if (themeButton) {
+                themeButton.addEventListener('click', function () {
+                    const activeTheme = document.documentElement.getAttribute('data-theme');
+                    const nextTheme = activeTheme === 'dark' ? 'light' : 'dark';
+
+                    document.documentElement.setAttribute('data-theme', nextTheme);
+
+                    try {
+                        localStorage.setItem('navaraFrontendTheme', nextTheme);
+                    } catch (error) {
+                        console.log('Theme tidak bisa disimpan.');
+                    }
+
+                    updateThemeButton(nextTheme);
+                });
+            }
+
+            function updateThemeButton(theme) {
+                if (!themeIcon || !themeText) return;
+
+                if (theme === 'dark') {
+                    themeIcon.className = 'bi bi-sun';
+                    themeText.textContent = 'Light';
+                } else {
+                    themeIcon.className = 'bi bi-moon-stars';
+                    themeText.textContent = 'Dark';
+                }
+            }
+        });
+    </script>
 
     <!-- File JS -->
     <script src="./js/api.js"></script>

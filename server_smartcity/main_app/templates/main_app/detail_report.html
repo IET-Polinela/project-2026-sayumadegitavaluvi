@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+
+{% block title %}Detail Laporan - Navara City{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'report_list' %}">Reports</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Detail Laporan
+        </li>
+    </ol>
+</nav>
+
+<section class="page-header detail-report-header">
+    <div class="detail-report-header-content">
+        <span class="section-pill">
+            Report Overview
+        </span>
+
+        <h1 class="page-title">
+            {{ report.title }}
+        </h1>
+
+        <p class="page-subtitle">
+            Informasi lengkap laporan Navara City beserta status penanganan dan aksi lanjutan.
+        </p>
+    </div>
+
+    <div class="detail-report-header-card">
+        <i class="bi bi-file-earmark-text"></i>
+        <div>
+            <strong>Detail Report</strong>
+            <span>Data laporan kota</span>
+        </div>
+    </div>
+</section>
+
+<section class="detail-report-layout">
+    <article class="detail-report-main-card">
+        <div class="detail-report-top">
+            <div>
+                <span class="section-pill">
+                    Informasi Laporan
+                </span>
+
+                <h2>
+                    Ringkasan Detail
+                </h2>
+            </div>
+
+            <div>
+                {% if report.status == 'DRAFT' %}
+                    <span class="report-status-pill report-status-draft">
+                        <span></span>
+                        Draft
+                    </span>
+                {% elif report.status == 'REPORTED' %}
+                    <span class="report-status-pill report-status-reported">
+                        <span></span>
+                        Reported
+                    </span>
+                {% elif report.status == 'VERIFIED' %}
+                    <span class="report-status-pill report-status-verified">
+                        <span></span>
+                        Verified
+                    </span>
+                {% elif report.status == 'IN_PROGRESS' %}
+                    <span class="report-status-pill report-status-progress">
+                        <span></span>
+                        In Progress
+                    </span>
+                {% elif report.status == 'RESOLVED' %}
+                    <span class="report-status-pill report-status-resolved">
+                        <span></span>
+                        Resolved
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="detail-report-info-grid">
+            <div class="detail-report-info-box detail-report-title-box">
+                <div class="detail-report-info-icon">
+                    <i class="bi bi-pencil-square"></i>
+                </div>
+
+                <span>Judul Laporan</span>
+                <strong>{{ report.title }}</strong>
+            </div>
+
+            <div class="detail-report-info-box">
+                <div class="detail-report-info-icon">
+                    <i class="bi bi-tags"></i>
+                </div>
+
+                <span>Kategori</span>
+                <strong>{{ report.category }}</strong>
+            </div>
+
+            <div class="detail-report-info-box">
+                <div class="detail-report-info-icon">
+                    <i class="bi bi-geo-alt"></i>
+                </div>
+
+                <span>Lokasi</span>
+                <strong>{{ report.location }}</strong>
+            </div>
+
+            <div class="detail-report-info-box">
+                <div class="detail-report-info-icon">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+
+                <span>Dibuat</span>
+                <strong>{{ report.created_at|date:"d F Y, H:i" }}</strong>
+            </div>
+        </div>
+
+        <div class="detail-report-description">
+            <div class="detail-report-description-heading">
+                <i class="bi bi-card-text"></i>
+                <h3>Deskripsi Laporan</h3>
+            </div>
+
+            <p>
+                {{ report.description }}
+            </p>
+        </div>
+    </article>
+
+    <aside class="detail-report-side">
+        <div class="detail-report-action-card">
+            <div class="detail-report-side-icon">
+                <i class="bi bi-lightning-charge"></i>
+            </div>
+
+            <h3>
+                Aksi Cepat
+            </h3>
+
+            <p>
+                Gunakan tombol berikut untuk mengubah status atau mengelola laporan.
+            </p>
+
+            <div class="detail-report-action-list">
+                {% if user.is_authenticated and user.is_admin %}
+                    {% if report.status == 'REPORTED' %}
+                        <form method="POST" action="{% url 'update_status' report.id %}" class="detail-action-form" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status menjadi Verified?')">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="VERIFIED">
+                            <button type="submit" class="detail-action-btn detail-action-verify">
+                                <i class="bi bi-check2-circle"></i>
+                                Verifikasi
+                            </button>
+                        </form>
+                    {% elif report.status == 'VERIFIED' %}
+                        <form method="POST" action="{% url 'update_status' report.id %}" class="detail-action-form" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status menjadi In Progress?')">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="IN_PROGRESS">
+                            <button type="submit" class="detail-action-btn detail-action-progress">
+                                <i class="bi bi-arrow-repeat"></i>
+                                Proses
+                            </button>
+                        </form>
+                    {% elif report.status == 'IN_PROGRESS' %}
+                        <form method="POST" action="{% url 'update_status' report.id %}" class="detail-action-form" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status menjadi Resolved?')">
+                            {% csrf_token %}
+                            <input type="hidden" name="status" value="RESOLVED">
+                            <button type="submit" class="detail-action-btn detail-action-resolved">
+                                <i class="bi bi-check-circle"></i>
+                                Selesaikan
+                            </button>
+                        </form>
+                    {% elif report.status == 'RESOLVED' %}
+                        <div class="detail-status-complete">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <div>
+                                <strong>Status akhir</strong>
+                                <span>Laporan sudah selesai ditangani.</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <a href="{% url 'edit_report' report.id %}" class="detail-action-btn detail-action-edit">
+                        <i class="bi bi-pencil-square"></i>
+                        Edit Laporan
+                    </a>
+
+                    <a href="{% url 'delete_report' report.id %}" class="detail-action-btn detail-action-delete">
+                        <i class="bi bi-trash"></i>
+                        Hapus Laporan
+                    </a>
+                {% else %}
+                    <div class="detail-status-complete">
+                        <i class="bi bi-info-circle-fill"></i>
+                        <div>
+                            <strong>Mode Pengunjung</strong>
+                            <span>Pengunjung hanya dapat melihat detail laporan.</span>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <a href="{% url 'report_list' %}" class="detail-action-btn detail-action-back">
+                    <i class="bi bi-arrow-left"></i>
+                    Kembali ke Reports
+                </a>
+            </div>
+        </div>
+
+        <div class="detail-report-status-flow">
+            <span class="section-pill">
+                Status Flow
+            </span>
+
+            <h3>
+                Alur Penanganan
+            </h3>
+
+            <div class="detail-flow-list">
+                <div class="detail-flow-item {% if report.status == 'REPORTED' or report.status == 'VERIFIED' or report.status == 'IN_PROGRESS' or report.status == 'RESOLVED' %}is-active{% endif %}">
+                    <span>1</span>
+                    <p>Reported</p>
+                </div>
+
+                <div class="detail-flow-item {% if report.status == 'VERIFIED' or report.status == 'IN_PROGRESS' or report.status == 'RESOLVED' %}is-active{% endif %}">
+                    <span>2</span>
+                    <p>Verified</p>
+                </div>
+
+                <div class="detail-flow-item {% if report.status == 'IN_PROGRESS' or report.status == 'RESOLVED' %}is-active{% endif %}">
+                    <span>3</span>
+                    <p>In Progress</p>
+                </div>
+
+                <div class="detail-flow-item {% if report.status == 'RESOLVED' %}is-active{% endif %}">
+                    <span>4</span>
+                    <p>Resolved</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+</section>
+{% endblock %}
