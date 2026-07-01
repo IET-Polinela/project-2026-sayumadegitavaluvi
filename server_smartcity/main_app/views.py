@@ -4,7 +4,7 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.db.models import Q
 
 from .models import Report
@@ -132,9 +132,8 @@ class ReportUpdateView(AdminRequiredMixin, UpdateView):
     template_name = 'main_app/edit_report.html'
     success_url = reverse_lazy('report_list')
 
-    def form_valid(self, form):
-        messages.success(self.request, 'Laporan berhasil diperbarui.')
-        return super().form_valid(form)
+    def dispatch(self, request, *args, **kwargs):
+        return HttpResponseForbidden('Admin tidak diperbolehkan mengedit isi laporan warga.')
 
 
 class ReportDeleteView(AdminRequiredMixin, DeleteView):
@@ -143,9 +142,8 @@ class ReportDeleteView(AdminRequiredMixin, DeleteView):
     context_object_name = 'report'
     success_url = reverse_lazy('report_list')
 
-    def form_valid(self, form):
-        messages.success(self.request, 'Laporan berhasil dihapus.')
-        return super().form_valid(form)
+    def dispatch(self, request, *args, **kwargs):
+        return HttpResponseForbidden('Admin tidak diperbolehkan menghapus laporan warga.')
 
 
 class ReportUpdateStatusView(AdminRequiredMixin, View):

@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.coverage
+htmlcov/
+
+# Node / Playwright
+node_modules/
+playwright-report/
+test-results/
+
+# Environment
+.env
+venv/
+.venv/
+
+# Database lokal jika ada
+*.sqlite3
+db.sqlite3

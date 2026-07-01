@@ -1,19 +1,30 @@
 from django.views.generic import TemplateView, View
 from django.http import JsonResponse
 from django.db.models import Count
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 from main_app.models import Report
 
 
-class DashboardView(TemplateView):
+class AdminRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    login_url = 'login'
+
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.is_admin
+
+
+class DashboardView(AdminRequiredMixin, TemplateView):
     template_name = 'dashboard_24782030/dashboard.html'
 
 
-class DashboardDataView(View):
+class DashboardDataView(AdminRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         total_reports = Report.objects.count()
 
-        # Distribusi status laporan
-        status_raw = Report.objects.values('status').annotate(total=Count('id')).order_by('status')
+        status_raw = Report.objects.values('status').annotate(
+            total=Count('id')
+        ).order_by('status')
+
         status_distribution = []
 
         for item in status_raw:
@@ -24,11 +35,12 @@ class DashboardDataView(View):
                 'percentage': percentage,
             })
 
-        # Distribusi kategori laporan
-        category_raw = Report.objects.values('category').annotate(total=Count('id')).order_by('-total')
+        category_raw = Report.objects.values('category').annotate(
+            total=Count('id')
+        ).order_by('-total')
+
         category_distribution = list(category_raw)
 
-        # 5 laporan terakhir dengan status REPORTED
         latest_reported = [
             {
                 'id': report.id,
@@ -41,7 +53,6 @@ class DashboardDataView(View):
             for report in Report.objects.filter(status='REPORTED').order_by('-created_at')[:5]
         ]
 
-        # 5 laporan terakhir dengan status RESOLVED
         latest_resolved = [
             {
                 'id': report.id,
